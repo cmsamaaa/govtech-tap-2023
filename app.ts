@@ -1,4 +1,4 @@
-import {Request, Response, NextFunction} from "express";
+import { Request, Response, NextFunction } from "express";
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -10,6 +10,7 @@ const MONGODB_URI = 'mongodb://localhost:27017/govtech_tap';
 
 const app = express();
 
+/* Parsing the body of the request. */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -17,8 +18,10 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
     res.send('Hello World!');
 });
 
+/* Telling the app to use the householdRoutes file for all requests that start with /household. */
 app.use('/household', householdRoutes);
 
+/* Connecting to the database and listening to port 3000. */
 mongoose.connect(MONGODB_URI)
     .then((result: any) => {
         app.listen(3000);

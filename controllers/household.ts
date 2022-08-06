@@ -1,5 +1,5 @@
-import {Request, Response, NextFunction} from "express";
-import {IHousehold} from "../models/household.model";
+import { Request, Response, NextFunction } from "express";
+import { IHousehold } from "../models/household.model";
 
 const Household = require('../models/household.schema');
 
@@ -14,6 +14,8 @@ exports.getAllHouseholds = (req: Request, res: Response, next: NextFunction) => 
 };
 
 exports.createHousehold = (req: Request, res: Response, next: NextFunction) => {
+    /* This is a check to ensure that the request body is not empty.
+    If it is empty, it will return a 400 error. */
     if (Object.keys(req.body).length === 0) {
         res.status(400).json({
             message: 'Request body empty. Ensure data is submitted in JSON format.'
