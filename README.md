@@ -2,31 +2,42 @@
 
 #### METEOR TAP Assessment 2023
 For this technical assessment, I chose to attempt the backend (REST API) project.
-This project is written in JavaScript for NodeJs, using Express.js framework with MySQL database.
+This project is written in TypeScript for NodeJs, using Express.js framework with MySQL database.
 
 ## Table of contents
 - [Getting Started](#getting-started)
 - [Dependencies](#dependencies)
 
 ## Getting Started
-In the project directory, you may run the following commands:
+In the project directory, you may run the following commands in the project directory's terminal:
 
 ### `npm install` 
    - This command will install all necessary dependencies.
-   - You only need to run this <b>once</b> in the project directory.
+   - You only need to run this command <b>once</b> in the project directory.
+### `npm run build`
+   - This command compiles TypeScript into JavaScript.
+   - The compiled JavaScript files will be located in `./dist`.
+   - Alternatively, you may run `npx tsc`.
+   - You need to run this command everytime you made a change to the TypeScript files.
+   - Find out more from [TypeScript](https://www.typescriptlang.org/docs/handbook/intro.html).
 ### `npm start`
-   - This command starts the node server.
-   - Alternatively, you may use `nodemon app.js` or `node app.js`.
-   - For more variations of nodemon commands, please refer to [Nodemon](https://github.com/remy/nodemon#nodemon).
+   - This command starts the node server located in `./dist`.
+   - Highly recommended to always run `npm run build` before `npm start` unless you're certain.
+   - Alternatively, you may run `node dist/app.js`.
+### `npm run dev`
+   - This command starts the node server in development environment.
+   - It will watch for any changes to the TypeScript files, compiles, and restart the server.
+   - Alternatively, you may run `concurrently "npx tsc --watch" "nodemon -q dist/app.js"`
+   - For more info, please refer to [concurrently](https://github.com/open-cli-tools/concurrently#usage) and [Nodemon](https://github.com/remy/nodemon#nodemon).
 
 ## Dependencies
 
+#### Node v16.x
     "dependencies": {
         "express": "^4.18.1",
         "knex": "^2.2.0",
         "mysql2": "^2.3.3"
-    }
-
+    },
     "devDependencies": {
         "@types/express": "^4.17.13",
         "@types/node": "^18.6.4",
