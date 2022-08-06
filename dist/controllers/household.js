@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const household_model_1 = require("../models/household.model");
+const familyMember_model_1 = require("../models/familyMember.model");
 const ObjectId = require('mongoose').Types.ObjectId;
 const Household = require('../models/household.schema');
 const FamilyMember = require('../models/familyMember.schema');
@@ -92,6 +93,21 @@ exports.addFamilyMember = (req, res, next) => {
         res.status(400).json({
             message: 'Request body empty. Ensure data is submitted in JSON format.'
         });
+        return;
+    }
+    let errMsg = "Invalid field(s): ";
+    if (!(0, familyMember_model_1.isValidGender)(req.body.gender))
+        errMsg += "gender, ";
+    if (!(0, familyMember_model_1.isValidMaritalStatus)(req.body.maritalStatus))
+        errMsg += "marital status, ";
+    if (!(0, familyMember_model_1.isValidOccupationType)(req.body.occupationType))
+        errMsg += "occupation type, ";
+    if (!(0, familyMember_model_1.isValidDecimal)(req.body.annualIncome))
+        errMsg += "annual income, ";
+    if (!(0, familyMember_model_1.isValidDOB)(req.body.DOB_day, req.body.DOB_month, req.body.DOB_year))
+        errMsg += "DOB, ";
+    if (errMsg !== "Invalid ") {
+        res.status(400).json({ message: `${errMsg.slice(0, errMsg.length - 2)}.` });
         return;
     }
     const familyMemberObj = {

@@ -1,7 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { HydratedDocument } from "mongoose";
 import { IHousehold, isValidHouseholdType } from "../models/household.model";
-import { IFamilyMember } from "../models/familyMember.model";
+import {
+    IFamilyMember,
+    isValidDecimal,
+    isValidDOB,
+    isValidGender,
+    isValidMaritalStatus,
+    isValidOccupationType
+} from "../models/familyMember.model";
 
 const ObjectId = require('mongoose').Types.ObjectId;
 
@@ -101,6 +108,22 @@ exports.addFamilyMember = (req: Request, res: Response, next: NextFunction) => {
         res.status(400).json({
             message: 'Request body empty. Ensure data is submitted in JSON format.'
         });
+        return;
+    }
+
+    let errMsg = "Invalid field(s): ";
+    if (!isValidGender(req.body.gender))
+        errMsg += "gender, ";
+    if (!isValidMaritalStatus(req.body.maritalStatus))
+        errMsg += "marital status, ";
+    if (!isValidOccupationType(req.body.occupationType))
+        errMsg += "occupation type, ";
+    if (!isValidDecimal(req.body.annualIncome))
+        errMsg += "annual income, ";
+    if (!isValidDOB(req.body.DOB_day, req.body.DOB_month, req.body.DOB_year))
+        errMsg += "DOB, ";
+    if (errMsg !== "Invalid ") {
+        res.status(400).json({ message: `${errMsg.slice(0, errMsg.length - 2)}.` });
         return;
     }
 
