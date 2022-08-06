@@ -19,7 +19,10 @@ exports.getAllHouseholds = (req, res, next) => {
         }
     })
         .then((households) => {
-        res.json(households);
+        if (households)
+            res.json(households);
+        else
+            res.json();
     })
         .catch((err) => {
         res.json({ message: err });
@@ -41,7 +44,10 @@ exports.findHousehold = (req, res, next) => {
         }
     })
         .then((household) => {
-        res.json(household);
+        if (household)
+            res.status(200).json(household);
+        else
+            res.status(404).json({ message: 'Household not found!' });
     })
         .catch((err) => {
         res.json({ message: err });

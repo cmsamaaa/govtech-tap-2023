@@ -24,7 +24,10 @@ exports.getAllHouseholds = (req: Request, res: Response, next: NextFunction) => 
             }
         })
         .then((households: [HydratedDocument<IHousehold>]) => {
-            res.json(households);
+            if (households)
+                res.json(households);
+            else
+                res.json()
         })
         .catch((err: any) => {
             res.json({ message: err });
@@ -47,7 +50,10 @@ exports.findHousehold = (req: Request, res: Response, next: NextFunction) => {
             }
         })
         .then((household: HydratedDocument<IHousehold>) => {
-            res.json(household);
+            if (household)
+                res.status(200).json(household);
+            else
+                res.status(404).json({ message: 'Household not found!' });
         })
         .catch((err: any) => {
             res.json({ message: err });
