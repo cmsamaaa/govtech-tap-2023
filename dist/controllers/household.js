@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const household_model_1 = require("../models/household.model");
 const ObjectId = require('mongoose').Types.ObjectId;
 const Household = require('../models/household.schema');
 const FamilyMember = require('../models/familyMember.schema');
@@ -58,9 +59,11 @@ exports.createHousehold = (req, res, next) => {
     /* This is a check to ensure that the request body is not empty.
     If it is empty, it will return a 400 error. */
     if (Object.keys(req.body).length === 0) {
-        res.status(400).json({
-            message: 'Request body empty. Ensure data is submitted in JSON format.'
-        });
+        res.status(400).json({ message: 'Request body empty. Ensure data is submitted in JSON format.' });
+        return;
+    }
+    if (!(0, household_model_1.isValidHouseholdType)(req.body.householdType)) {
+        res.status(400).json({ message: 'Invalid household type.' });
         return;
     }
     const householdObj = {

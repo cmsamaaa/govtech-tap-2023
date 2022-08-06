@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { HydratedDocument } from "mongoose";
-import { IHousehold } from "../models/household.model";
+import { IHousehold, isValidHouseholdType } from "../models/household.model";
 import { IFamilyMember } from "../models/familyMember.model";
 
 const ObjectId = require('mongoose').Types.ObjectId;
@@ -65,9 +65,12 @@ exports.createHousehold = (req: Request, res: Response, next: NextFunction) => {
     /* This is a check to ensure that the request body is not empty.
     If it is empty, it will return a 400 error. */
     if (Object.keys(req.body).length === 0) {
-        res.status(400).json({
-            message: 'Request body empty. Ensure data is submitted in JSON format.'
-        });
+        res.status(400).json({ message: 'Request body empty. Ensure data is submitted in JSON format.' });
+        return;
+    }
+
+    if (!isValidHouseholdType(req.body.householdType)) {
+        res.status(400).json({ message: 'Invalid household type.' });
         return;
     }
 
