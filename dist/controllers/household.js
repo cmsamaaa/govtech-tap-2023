@@ -20,9 +20,9 @@ exports.getAllHouseholds = (req, res, next) => {
     })
         .then((households) => {
         if (households)
-            res.json(households);
+            res.status(200).json(households);
         else
-            res.json();
+            res.status(404).json({ message: 'Household not found!' });
     })
         .catch((err) => {
         res.json({ message: err });

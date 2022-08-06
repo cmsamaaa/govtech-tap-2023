@@ -25,9 +25,9 @@ exports.getAllHouseholds = (req: Request, res: Response, next: NextFunction) => 
         })
         .then((households: [HydratedDocument<IHousehold>]) => {
             if (households)
-                res.json(households);
+                res.status(200).json(households);
             else
-                res.json()
+                res.status(404).json({ message: 'Household not found!' });
         })
         .catch((err: any) => {
             res.json({ message: err });
