@@ -25,7 +25,7 @@ app.use('/household', householdRoutes);
 /* Connecting to the database and listening to port 3000. */
 mongoose.connect(MONGODB_URI)
     .then((result: any) => {
-        app.listen(3000);
+        app.listen(process.env.PORT);
     })
     .catch((err: any) => {
         console.log(err);
