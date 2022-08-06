@@ -3,7 +3,7 @@ import { IHousehold } from './household.model';
 
 const FamilyMember = require('../models/familyMember.schema');
 
-const householdSchema: Schema<IHousehold> = new Schema({
+const householdSchema: Schema<IHousehold> = new Schema<IHousehold>({
     householdType: {
         type: String,
         required: true
@@ -25,4 +25,4 @@ const householdSchema: Schema<IHousehold> = new Schema({
     ]
 });
 
-module.exports = model('Households', householdSchema);
+module.exports = model<IHousehold>('Households', householdSchema);
