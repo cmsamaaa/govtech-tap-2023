@@ -24,7 +24,7 @@ exports.getAllHouseholds = (req: Request, res: Response, next: NextFunction) => 
         res.json(households);
     })
     .catch((err: any) => {
-        console.log(err);
+        res.json({ message: err });
     });
 };
 

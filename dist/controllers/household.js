@@ -19,7 +19,7 @@ exports.getAllHouseholds = (req, res, next) => {
         res.json(households);
     })
         .catch((err) => {
-        console.log(err);
+        res.json({ message: err });
     });
 };
 // Retrieves a household records by ID
