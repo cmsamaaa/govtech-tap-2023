@@ -2,7 +2,7 @@
 
 #### METEOR TAP Assessment 2023
 For this technical assessment, I chose to attempt the backend (REST API) project.
-This project is written in TypeScript for NodeJs, using Express.js framework with MySQL database.
+This project is written in TypeScript for NodeJs, using Express.js framework with MongoDB database.
 
 ## Table of contents
 - [Getting Started](#getting-started)
@@ -34,12 +34,14 @@ In the project directory, you may run the following commands in the project dire
 
 #### Node v16.x
     "dependencies": {
+        "body-parser": "^1.20.0",
         "express": "^4.18.1",
-        "knex": "^2.2.0",
-        "mysql2": "^2.3.3"
+        "mongoose": "^6.5.1"
     },
     "devDependencies": {
+        "@types/body-parser": "^1.19.2",
         "@types/express": "^4.17.13",
+        "@types/mongoose": "^5.11.97",
         "@types/node": "^18.6.4",
         "concurrently": "^7.3.0",
         "nodemon": "^2.0.19",
