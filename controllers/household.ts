@@ -46,13 +46,8 @@ exports.findHousehold = (req: Request, res: Response, next: NextFunction) => {
                 DOB: 1
             }
         })
-        .then((result: HydratedDocument<IHousehold>) => {
-            const householdObj: IHousehold = {
-                _id: result._id,
-                householdType: result.householdType,
-                familyMembers: result.familyMembers
-            };
-            res.json(householdObj);
+        .then((household: HydratedDocument<IHousehold>) => {
+            res.json(household);
         })
         .catch((err: any) => {
             res.json({ message: err });

@@ -40,13 +40,8 @@ exports.findHousehold = (req, res, next) => {
             DOB: 1
         }
     })
-        .then((result) => {
-        const householdObj = {
-            _id: result._id,
-            householdType: result.householdType,
-            familyMembers: result.familyMembers
-        };
-        res.json(householdObj);
+        .then((household) => {
+        res.json(household);
     })
         .catch((err) => {
         res.json({ message: err });
