@@ -5,8 +5,7 @@ const Household = require('../models/household.schema');
 const FamilyMember = require('../models/familyMember.schema');
 // Retrieves all household records
 exports.getAllHouseholds = (req, res, next) => {
-    Household.find()
-        .then((results) => {
+    Household.find().then((results) => {
         const households = [new Household()];
         households.shift();
         for (let i = 0; i < results.length; i++) {
@@ -21,6 +20,33 @@ exports.getAllHouseholds = (req, res, next) => {
     })
         .catch((err) => {
         console.log(err);
+    });
+};
+// Retrieves a household records by ID
+exports.findHousehold = (req, res, next) => {
+    Household.findById(ObjectId(req.params.id))
+        .select({
+        _id: 1,
+        householdType: 1,
+        familyMembers: {
+            name: 1,
+            gender: 1,
+            maritalStatus: 1,
+            occupationType: 1,
+            annualIncome: 1,
+            DOB: 1
+        }
+    })
+        .then((result) => {
+        const householdObj = {
+            _id: result._id,
+            householdType: result.householdType,
+            familyMembers: result.familyMembers
+        };
+        res.json(householdObj);
+    })
+        .catch((err) => {
+        res.json({ message: err });
     });
 };
 // Creates a household record
@@ -40,8 +66,7 @@ exports.createHousehold = (req, res, next) => {
         postal: req.body.postal
     };
     const household = new Household(householdObj);
-    household.save()
-        .then((result) => {
+    household.save().then((result) => {
         res.status(201).json({
             message: 'Household added successfully',
             householdId: result._id

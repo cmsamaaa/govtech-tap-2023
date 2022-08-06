@@ -10,22 +10,49 @@ const FamilyMember = require('../models/familyMember.schema');
 
 // Retrieves all household records
 exports.getAllHouseholds = (req: Request, res: Response, next: NextFunction) => {
-    Household.find()
-        .then((results: [HydratedDocument<IHousehold>]) => {
-            const households: [IHousehold] = [new Household()];
-            households.shift();
-            for (let i = 0; i < results.length; i++) {
-                const householdObj: IHousehold = {
-                    _id: results[i]._id,
-                    householdType: results[i].householdType,
-                    familyMembers: results[i].familyMembers
-                };
-                households.push(householdObj);
+    Household.find().then((results: [HydratedDocument<IHousehold>]) => {
+        const households: [IHousehold] = [new Household()];
+        households.shift();
+        for (let i = 0; i < results.length; i++) {
+            const householdObj: IHousehold = {
+                _id: results[i]._id,
+                householdType: results[i].householdType,
+                familyMembers: results[i].familyMembers
+            };
+            households.push(householdObj);
+        }
+        res.json(households);
+    })
+    .catch((err: any) => {
+        console.log(err);
+    });
+};
+
+// Retrieves a household records by ID
+exports.findHousehold = (req: Request, res: Response, next: NextFunction) => {
+    Household.findById(ObjectId(req.params.id))
+        .select({
+            _id: 1,
+            householdType: 1,
+            familyMembers: {
+                name: 1,
+                gender: 1,
+                maritalStatus: 1,
+                occupationType: 1,
+                annualIncome: 1,
+                DOB: 1
             }
-            res.json(households);
+        })
+        .then((result: HydratedDocument<IHousehold>) => {
+            const householdObj: IHousehold = {
+                _id: result._id,
+                householdType: result.householdType,
+                familyMembers: result.familyMembers
+            };
+            res.json(householdObj);
         })
         .catch((err: any) => {
-            console.log(err);
+            res.json({ message: err });
         });
 };
 
@@ -48,16 +75,15 @@ exports.createHousehold = (req: Request, res: Response, next: NextFunction) => {
     };
 
     const household: HydratedDocument<IHousehold> = new Household(householdObj);
-    household.save()
-        .then((result: any) => {
-            res.status(201).json({
-                message: 'Household added successfully',
-                householdId: result._id
-            });
-        })
-        .catch((err: any) => {
-            console.log(err);
+    household.save().then((result: any) => {
+        res.status(201).json({
+            message: 'Household added successfully',
+            householdId: result._id
         });
+    })
+    .catch((err: any) => {
+        console.log(err);
+    });
 };
 
 // Add a family member into household record
