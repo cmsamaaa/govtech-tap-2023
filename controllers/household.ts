@@ -11,8 +11,18 @@ const FamilyMember = require('../models/familyMember.schema');
 // Retrieves all household records
 exports.getAllHouseholds = (req: Request, res: Response, next: NextFunction) => {
     Household.find()
-        .then((households: any) => {
-            res.send(households);
+        .then((results: [HydratedDocument<IHousehold>]) => {
+            const households: [IHousehold] = [new Household()];
+            households.shift();
+            for (let i = 0; i < results.length; i++) {
+                const householdObj: IHousehold = {
+                    _id: results[i]._id,
+                    householdType: results[i].householdType,
+                    familyMembers: results[i].familyMembers
+                };
+                households.push(householdObj);
+            }
+            res.json(households);
         })
         .catch((err: any) => {
             console.log(err);
