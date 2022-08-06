@@ -20,11 +20,17 @@ In the project directory, you may run the following commands:
    - For more variations of nodemon commands, please refer to [Nodemon](https://github.com/remy/nodemon#nodemon).
 
 ## Dependencies
+
     "dependencies": {
         "express": "^4.18.1",
         "knex": "^2.2.0",
         "mysql2": "^2.3.3"
-    },
+    }
+
     "devDependencies": {
-        "nodemon": "^2.0.19"
+        "@types/express": "^4.17.13",
+        "@types/node": "^18.6.4",
+        "concurrently": "^7.3.0",
+        "nodemon": "^2.0.19",
+        "typescript": "^4.7.4"
     }
