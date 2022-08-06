@@ -1,7 +1,7 @@
 # govtech-tap-2023
 
 #### METEOR TAP Assessment 2023
-For this technical assessment, I chose to attempt the backend (REST API) project.
+For this technical assessment, I chose to attempt the backend (RESTful API) project.
 This project is written in TypeScript for NodeJs, using Express.js framework with MongoDB database.
 
 ## Table of contents
