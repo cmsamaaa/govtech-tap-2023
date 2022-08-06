@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 
 const householdRoutes = require('./routes/household');
 
-const MONGODB_URI = 'mongodb://localhost:27017/govtech_tap';
+require('dotenv').config();
+const MONGODB_URI = process.env.MONGODB_URI;
 
 const app = express();
 

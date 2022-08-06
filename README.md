@@ -35,6 +35,7 @@ In the project directory, you may run the following commands in the terminal:
 #### Node v16.x
     "dependencies": {
         "body-parser": "^1.20.0",
+        "dotenv": "^16.0.1",
         "express": "^4.18.1",
         "mongoose": "^6.5.1"
     },
