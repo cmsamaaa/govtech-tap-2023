@@ -82,7 +82,7 @@ exports.createHousehold = (req: Request, res: Response, next: NextFunction) => {
         });
     })
     .catch((err: any) => {
-        console.log(err);
+        res.status(400).json({ message: err });
     });
 };
 
