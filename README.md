@@ -9,7 +9,7 @@ This project is written in TypeScript for NodeJs, using Express.js framework wit
 - [Dependencies](#dependencies)
 
 ## Getting Started
-In the project directory, you may run the following commands in the project directory's terminal:
+In the project directory, you may run the following commands in the terminal:
 
 ### `npm install` 
    - This command will install all necessary dependencies.
