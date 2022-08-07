@@ -15,6 +15,303 @@ const ObjectId = require('mongoose').Types.ObjectId;
 const Household = require('../models/household.schema');
 const FamilyMember = require('../models/familyMember.schema');
 
+// Student Encouragement Bonus
+const studentEncouragementBonus = async (): Promise<[HydratedDocument<IHousehold>]> => {
+    return Household.aggregate(
+        [
+            {
+                $group:
+                    {
+                        _id: '$_id',
+                        householdType: {$first: '$householdType'},
+                        householdIncome: {$sum: {$sum: '$familyMembers.annualIncome'}},
+                        familyMembers: {$first: '$familyMembers'}
+                    }
+            },
+            {
+                $addFields:
+                    {
+                        familyMembers: {
+                            $map: {
+                                input: '$familyMembers',
+                                as: 'fm',
+                                in: {
+                                    $mergeObjects: [
+                                        '$$fm', {
+                                            age: {
+                                                $dateDiff: {
+                                                    startDate: '$$fm.DOB',
+                                                    endDate: new Date(),
+                                                    unit: 'year'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+            },
+            {
+                $match:
+                    {
+                        $and: [
+                            { 'familyMembers.age': { $lt: 16 } },
+                            { 'familyMembers.occupationType': { $eq: 'Student' } },
+                            { 'householdIncome': { $lt: 200000 } }
+                        ]
+                    }
+            },
+            {
+                $addFields:
+                    {
+                        familyMembers: {
+                            $filter: {
+                                input: '$familyMembers',
+                                as: 'fm',
+                                cond: {
+                                    $and: [
+                                        { $lt: ['$$fm.age', 16] },
+                                        { $eq: ['$$fm.occupationType', 'Student'] }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+            }
+        ]
+    );
+};
+
+// Multigeneration Scheme
+const multiGenerationScheme = async (): Promise<[HydratedDocument<IHousehold>]> => {
+    return Household.aggregate(
+        [
+            {
+                $group:
+                    {
+                        _id: '$_id',
+                        householdType: {$first: '$householdType'},
+                        householdIncome: {$sum: {$sum: '$familyMembers.annualIncome'}},
+                        familyMembers: {$first: '$familyMembers'}
+                    }
+            },
+            {
+                $addFields:
+                    {
+                        familyMembers: {
+                            $map: {
+                                input: '$familyMembers',
+                                as: 'fm',
+                                in: {
+                                    $mergeObjects: [
+                                        '$$fm', {
+                                            age: {
+                                                $dateDiff: {
+                                                    startDate: '$$fm.DOB',
+                                                    endDate: new Date(),
+                                                    unit: 'year'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+            },
+            {
+                $match:
+                    {
+                        $and: [
+                            {
+                                $or: [
+                                    { 'familyMembers.age': { $lt: 18 } },
+                                    { 'familyMembers.age': { $gt: 55 } }
+                                ]
+                            },
+                            { 'householdIncome': { $lt: 150000 } }
+                        ]
+                    }
+            }
+        ]
+    );
+};
+
+// Elder Bonus
+const elderBonus = async (): Promise<[HydratedDocument<IHousehold>]> => {
+    return Household.aggregate(
+        [
+            {
+                $project:
+                    {
+                        _id: '$_id',
+                        householdType: '$householdType',
+                        familyMembers: '$familyMembers'
+                    }
+            },
+            {
+                $addFields:
+                    {
+                        familyMembers: {
+                            $map: {
+                                input: '$familyMembers',
+                                as: 'fm',
+                                in: {
+                                    $mergeObjects: [
+                                        '$$fm', {
+                                            age: {
+                                                $dateDiff: {
+                                                    startDate: '$$fm.DOB',
+                                                    endDate: new Date(),
+                                                    unit: 'year'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+            },
+            {
+                $match:
+                    {
+                        $and: [
+                            { 'householdType': { $eq: 'HDB' } },
+                            { 'familyMembers.age': { $gte: 55 } }
+                        ]
+                    }
+            },
+            {
+                $addFields:
+                    {
+                        familyMembers: {
+                            $filter: {
+                                input: '$familyMembers',
+                                as: 'fm',
+                                cond: {
+                                    $gte: ['$$fm.age', 55]
+                                }
+                            }
+                        }
+                    }
+            }
+        ]
+    );
+};
+
+// Baby Sunshine Grant
+const babySunshineGrant = async (): Promise<[HydratedDocument<IHousehold>]> => {
+    return Household.aggregate(
+        [
+            {
+                $project:
+                    {
+                        _id: '$_id',
+                        householdType: '$householdType',
+                        familyMembers: '$familyMembers'
+                    }
+            },
+            {
+                $addFields:
+                    {
+                        familyMembers: {
+                            $map: {
+                                input: '$familyMembers',
+                                as: 'fm',
+                                in: {
+                                    $mergeObjects: [
+                                        '$$fm', {
+                                            age_month: {
+                                                $dateDiff: {
+                                                    startDate: '$$fm.DOB',
+                                                    endDate: new Date(),
+                                                    unit: 'month'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+            },
+            {
+                $match: {
+                    'familyMembers.age_month': { $lt: 8 }
+                }
+            },
+            {
+                $addFields:
+                    {
+                        familyMembers: {
+                            $filter: {
+                                input: '$familyMembers',
+                                as: 'fm',
+                                cond: {
+                                    $lt: ['$$fm.age_month', 8]
+                                }
+                            }
+                        }
+                    }
+            }
+        ]
+    );
+};
+
+// YOLO GST Grant
+const yoloGstGrant = async (): Promise<[HydratedDocument<IHousehold>]> => {
+    return Household.aggregate(
+        [
+            {
+                $group:
+                    {
+                        _id: '$_id',
+                        householdType: {$first: '$householdType'},
+                        householdIncome: {$sum: {$sum: '$familyMembers.annualIncome'}},
+                        familyMembers: {$first: '$familyMembers'}
+                    }
+            },
+            {
+                $match:
+                    {
+                        $and: [
+                            { 'householdType': { $eq: 'HDB' } },
+                            { 'householdIncome': { $lt: 100000 } }
+                        ]
+                    }
+            }
+        ]
+    );
+};
+
+// List the households and qualifying members of grant disbursement
+exports.findQualifyingHouseholds = async (req: Request, res: Response, next: NextFunction) => {
+    let data: [HydratedDocument<IHousehold>] | undefined;
+    switch (req.params.grantOption) {
+        case "0":
+            data = await studentEncouragementBonus();
+            break;
+        case "1":
+            data = await multiGenerationScheme();
+            break;
+        case "2":
+            data = await elderBonus();
+            break;
+        case "3":
+            data = await babySunshineGrant();
+            break;
+        case "4":
+            data = await yoloGstGrant();
+            break;
+        default:
+            res.status(404).json({message: 'Invalid argument.'});
+            break;
+    }
+    res.status(200).json(data);
+}
+
 // Retrieves all household records
 exports.getAllHouseholds = (req: Request, res: Response, next: NextFunction) => {
     Household.find()

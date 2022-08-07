@@ -1,10 +1,284 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const household_model_1 = require("../models/household.model");
 const familyMember_model_1 = require("../models/familyMember.model");
 const ObjectId = require('mongoose').Types.ObjectId;
 const Household = require('../models/household.schema');
 const FamilyMember = require('../models/familyMember.schema');
+// Student Encouragement Bonus
+const studentEncouragementBonus = () => __awaiter(void 0, void 0, void 0, function* () {
+    return Household.aggregate([
+        {
+            $group: {
+                _id: '$_id',
+                householdType: { $first: '$householdType' },
+                householdIncome: { $sum: { $sum: '$familyMembers.annualIncome' } },
+                familyMembers: { $first: '$familyMembers' }
+            }
+        },
+        {
+            $addFields: {
+                familyMembers: {
+                    $map: {
+                        input: '$familyMembers',
+                        as: 'fm',
+                        in: {
+                            $mergeObjects: [
+                                '$$fm', {
+                                    age: {
+                                        $dateDiff: {
+                                            startDate: '$$fm.DOB',
+                                            endDate: new Date(),
+                                            unit: 'year'
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        {
+            $match: {
+                $and: [
+                    { 'familyMembers.age': { $lt: 16 } },
+                    { 'familyMembers.occupationType': { $eq: 'Student' } },
+                    { 'householdIncome': { $lt: 200000 } }
+                ]
+            }
+        },
+        {
+            $addFields: {
+                familyMembers: {
+                    $filter: {
+                        input: '$familyMembers',
+                        as: 'fm',
+                        cond: {
+                            $and: [
+                                { $lt: ['$$fm.age', 16] },
+                                { $eq: ['$$fm.occupationType', 'Student'] }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    ]);
+});
+// Multigeneration Scheme
+const multiGenerationScheme = () => __awaiter(void 0, void 0, void 0, function* () {
+    return Household.aggregate([
+        {
+            $group: {
+                _id: '$_id',
+                householdType: { $first: '$householdType' },
+                householdIncome: { $sum: { $sum: '$familyMembers.annualIncome' } },
+                familyMembers: { $first: '$familyMembers' }
+            }
+        },
+        {
+            $addFields: {
+                familyMembers: {
+                    $map: {
+                        input: '$familyMembers',
+                        as: 'fm',
+                        in: {
+                            $mergeObjects: [
+                                '$$fm', {
+                                    age: {
+                                        $dateDiff: {
+                                            startDate: '$$fm.DOB',
+                                            endDate: new Date(),
+                                            unit: 'year'
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        {
+            $match: {
+                $and: [
+                    {
+                        $or: [
+                            { 'familyMembers.age': { $lt: 18 } },
+                            { 'familyMembers.age': { $gt: 55 } }
+                        ]
+                    },
+                    { 'householdIncome': { $lt: 150000 } }
+                ]
+            }
+        }
+    ]);
+});
+// Elder Bonus
+const elderBonus = () => __awaiter(void 0, void 0, void 0, function* () {
+    return Household.aggregate([
+        {
+            $project: {
+                _id: '$_id',
+                householdType: '$householdType',
+                familyMembers: '$familyMembers'
+            }
+        },
+        {
+            $addFields: {
+                familyMembers: {
+                    $map: {
+                        input: '$familyMembers',
+                        as: 'fm',
+                        in: {
+                            $mergeObjects: [
+                                '$$fm', {
+                                    age: {
+                                        $dateDiff: {
+                                            startDate: '$$fm.DOB',
+                                            endDate: new Date(),
+                                            unit: 'year'
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        {
+            $match: {
+                $and: [
+                    { 'householdType': { $eq: 'HDB' } },
+                    { 'familyMembers.age': { $gte: 55 } }
+                ]
+            }
+        },
+        {
+            $addFields: {
+                familyMembers: {
+                    $filter: {
+                        input: '$familyMembers',
+                        as: 'fm',
+                        cond: {
+                            $gte: ['$$fm.age', 55]
+                        }
+                    }
+                }
+            }
+        }
+    ]);
+});
+// Baby Sunshine Grant
+const babySunshineGrant = () => __awaiter(void 0, void 0, void 0, function* () {
+    return Household.aggregate([
+        {
+            $project: {
+                _id: '$_id',
+                householdType: '$householdType',
+                familyMembers: '$familyMembers'
+            }
+        },
+        {
+            $addFields: {
+                familyMembers: {
+                    $map: {
+                        input: '$familyMembers',
+                        as: 'fm',
+                        in: {
+                            $mergeObjects: [
+                                '$$fm', {
+                                    age_month: {
+                                        $dateDiff: {
+                                            startDate: '$$fm.DOB',
+                                            endDate: new Date(),
+                                            unit: 'month'
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        {
+            $match: {
+                'familyMembers.age_month': { $lt: 8 }
+            }
+        },
+        {
+            $addFields: {
+                familyMembers: {
+                    $filter: {
+                        input: '$familyMembers',
+                        as: 'fm',
+                        cond: {
+                            $lt: ['$$fm.age_month', 8]
+                        }
+                    }
+                }
+            }
+        }
+    ]);
+});
+// YOLO GST Grant
+const yoloGstGrant = () => __awaiter(void 0, void 0, void 0, function* () {
+    return Household.aggregate([
+        {
+            $group: {
+                _id: '$_id',
+                householdType: { $first: '$householdType' },
+                householdIncome: { $sum: { $sum: '$familyMembers.annualIncome' } },
+                familyMembers: { $first: '$familyMembers' }
+            }
+        },
+        {
+            $match: {
+                $and: [
+                    { 'householdType': { $eq: 'HDB' } },
+                    { 'householdIncome': { $lt: 100000 } }
+                ]
+            }
+        }
+    ]);
+});
+// List the households and qualifying members of grant disbursement
+exports.findQualifyingHouseholds = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    let data;
+    switch (req.params.grantOption) {
+        case "0":
+            data = yield studentEncouragementBonus();
+            break;
+        case "1":
+            data = yield multiGenerationScheme();
+            break;
+        case "2":
+            data = yield elderBonus();
+            break;
+        case "3":
+            data = yield babySunshineGrant();
+            break;
+        case "4":
+            data = yield yoloGstGrant();
+            break;
+        default:
+            res.status(404).json({ message: 'Invalid argument.' });
+            break;
+    }
+    res.status(200).json(data);
+});
 // Retrieves all household records
 exports.getAllHouseholds = (req, res, next) => {
     Household.find()
