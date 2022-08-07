@@ -29,7 +29,7 @@ export function isValidOccupationType(occupationType: String): occupationType is
 }
 
 export function isValidDecimal(value: Number): value is Number {
-    return !!Number(value);
+    return !!Number(value) || value === 0;
 }
 
 export function isValidDOB(day: String, month: String, year: String): boolean {

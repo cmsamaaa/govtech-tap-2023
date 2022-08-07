@@ -14,7 +14,7 @@ function isValidOccupationType(occupationType) {
 }
 exports.isValidOccupationType = isValidOccupationType;
 function isValidDecimal(value) {
-    return !!Number(value);
+    return !!Number(value) || value === 0;
 }
 exports.isValidDecimal = isValidDecimal;
 function isValidDOB(day, month, year) {
