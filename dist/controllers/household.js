@@ -106,7 +106,7 @@ exports.addFamilyMember = (req, res, next) => {
         errMsg += "annual income, ";
     if (!(0, familyMember_model_1.isValidDOB)(req.body.DOB_day, req.body.DOB_month, req.body.DOB_year))
         errMsg += "DOB, ";
-    if (errMsg !== "Invalid ") {
+    if (errMsg !== "Invalid field(s): ") {
         res.status(400).json({ message: `${errMsg.slice(0, errMsg.length - 2)}.` });
         return;
     }
@@ -125,6 +125,10 @@ exports.addFamilyMember = (req, res, next) => {
             familyMembers.push(new FamilyMember(familyMemberObj));
             const household = new Household({
                 _id: req.params.id,
+                householdType: households.get('householdType'),
+                street: households.get('street'),
+                unit: households.get('unit'),
+                postal: households.get('postal'),
                 familyMembers: familyMembers
             });
             household.updateOne(household)

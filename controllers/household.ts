@@ -122,7 +122,7 @@ exports.addFamilyMember = (req: Request, res: Response, next: NextFunction) => {
         errMsg += "annual income, ";
     if (!isValidDOB(req.body.DOB_day, req.body.DOB_month, req.body.DOB_year))
         errMsg += "DOB, ";
-    if (errMsg !== "Invalid ") {
+    if (errMsg !== "Invalid field(s): ") {
         res.status(400).json({ message: `${errMsg.slice(0, errMsg.length - 2)}.` });
         return;
     }
@@ -144,6 +144,10 @@ exports.addFamilyMember = (req: Request, res: Response, next: NextFunction) => {
 
             const household: HydratedDocument<IHousehold> = new Household({
                 _id: req.params.id,
+                householdType: households.get('householdType'),
+                street: households.get('street'),
+                unit: households.get('unit'),
+                postal: households.get('postal'),
                 familyMembers: familyMembers
             });
 
