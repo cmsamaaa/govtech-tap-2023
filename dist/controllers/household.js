@@ -7,7 +7,8 @@ const Household = require('../models/household.schema');
 const FamilyMember = require('../models/familyMember.schema');
 // Retrieves all household records
 exports.getAllHouseholds = (req, res, next) => {
-    Household.find().select({
+    Household.find()
+        .select({
         _id: 1,
         householdType: 1,
         familyMembers: {
@@ -74,7 +75,8 @@ exports.createHousehold = (req, res, next) => {
         postal: req.body.postal
     };
     const household = new Household(householdObj);
-    household.save().then((result) => {
+    household.save()
+        .then((result) => {
         res.status(201).json({
             message: 'Household added successfully',
             householdId: result._id

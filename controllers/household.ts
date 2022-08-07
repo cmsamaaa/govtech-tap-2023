@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
-import { HydratedDocument } from "mongoose";
-import { IHousehold, isValidHouseholdType } from "../models/household.model";
+import {NextFunction, Request, Response} from "express";
+import {HydratedDocument} from "mongoose";
+import {IHousehold, isValidHouseholdType} from "../models/household.model";
 import {
     IFamilyMember,
     isValidDecimal,
@@ -17,27 +17,29 @@ const FamilyMember = require('../models/familyMember.schema');
 
 // Retrieves all household records
 exports.getAllHouseholds = (req: Request, res: Response, next: NextFunction) => {
-    Household.find().select({
-            _id: 1,
-            householdType: 1,
-            familyMembers: {
-                name: 1,
-                gender: 1,
-                maritalStatus: 1,
-                spouse: 1,
-                occupationType: 1,
-                annualIncome: 1,
-                DOB: 1
+    Household.find()
+        .select({
+                _id: 1,
+                householdType: 1,
+                familyMembers: {
+                    name: 1,
+                    gender: 1,
+                    maritalStatus: 1,
+                    spouse: 1,
+                    occupationType: 1,
+                    annualIncome: 1,
+                    DOB: 1
+                }
             }
-        })
+        )
         .then((households: [HydratedDocument<IHousehold>]) => {
             if (households)
                 res.status(200).json(households);
             else
-                res.status(404).json({ message: 'Household not found!' });
+                res.status(404).json({message: 'Household not found!'});
         })
         .catch((err: any) => {
-            res.json({ message: err });
+            res.json({message: err});
         });
 };
 
@@ -89,15 +91,16 @@ exports.createHousehold = (req: Request, res: Response, next: NextFunction) => {
     };
 
     const household: HydratedDocument<IHousehold> = new Household(householdObj);
-    household.save().then((result: any) => {
-        res.status(201).json({
-            message: 'Household added successfully',
-            householdId: result._id
+    household.save()
+        .then((result: any) => {
+            res.status(201).json({
+                message: 'Household added successfully',
+                householdId: result._id
+            });
+        })
+        .catch((err: any) => {
+            res.status(400).json({ message: err });
         });
-    })
-    .catch((err: any) => {
-        res.status(400).json({ message: err });
-    });
 };
 
 // Add a family member into household record
