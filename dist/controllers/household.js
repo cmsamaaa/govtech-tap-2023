@@ -148,8 +148,7 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
             const result = yield household.updateOne(household);
             if (result.modifiedCount > 0)
                 res.status(http_status_1.HTTP_STATUS.OK).json({
-                    statusCode: http_status_1.HTTP_STATUS.OK,
-                    message: `${req.body.name} has been added to the household!`
+                    statusCode: http_status_1.HTTP_STATUS.OK
                 });
             else
                 res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({

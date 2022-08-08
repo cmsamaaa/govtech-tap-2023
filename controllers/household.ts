@@ -160,8 +160,7 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
 
             if (result.modifiedCount > 0)
                 res.status(HTTP_STATUS.OK).json({
-                    statusCode: HTTP_STATUS.OK,
-                    message: `${req.body.name} has been added to the household!`
+                    statusCode: HTTP_STATUS.OK
                 });
             else
                 res.status(HTTP_STATUS.BAD_REQUEST).json({
