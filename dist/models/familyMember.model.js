@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isValidDOB = exports.isValidDecimal = exports.isValidOccupationType = exports.isValidMaritalStatus = exports.isValidGender = void 0;
 function isValidGender(gender) {
-    return ['Male', 'Female'].includes(gender.toString());
+    return ['Male', 'Female', 'Non-binary'].includes(gender.toString());
 }
 exports.isValidGender = isValidGender;
 function isValidMaritalStatus(maritalStatus) {

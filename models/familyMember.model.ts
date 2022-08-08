@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
 import {HouseholdType} from "./household.model";
 
-export type Gender = 'Male' | 'Female';
+export type Gender = 'Male' | 'Female' | 'Non-binary';
 export type MaritalStatus = 'Single' | 'Married' | 'Divorced';
 export type OccupationType = 'Unemployed' | 'Student' | 'Employed';
 
@@ -17,7 +17,7 @@ export interface IFamilyMember {
 }
 
 export function isValidGender(gender: String): gender is Gender {
-    return ['Male', 'Female'].includes(gender.toString());
+    return ['Male', 'Female', 'Non-binary'].includes(gender.toString());
 }
 
 export function isValidMaritalStatus(maritalStatus: String): maritalStatus is MaritalStatus {
