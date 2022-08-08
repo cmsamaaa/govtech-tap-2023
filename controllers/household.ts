@@ -28,7 +28,7 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
     if (Object.keys(req.body).length === 0) {
         res.status(StatusCode.BAD_REQUEST).json({
             statusCode: StatusCode.BAD_REQUEST,
-            message: 'Request body empty. Ensure data is submitted in JSON format.'
+            message: 'Request body empty. Ensure request is submitted in JSON format.'
         });
         return;
     }
@@ -72,7 +72,7 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
     if (Object.keys(req.body).length === 0) {
         res.status(StatusCode.BAD_REQUEST).json({
             statusCode: StatusCode.BAD_REQUEST,
-            message: 'Request body empty. Ensure data is submitted in JSON format.'
+            message: 'Request body empty. Ensure request is submitted in JSON format.'
         });
         return;
     }
