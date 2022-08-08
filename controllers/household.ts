@@ -44,6 +44,14 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
         return;
     }
 
+    if (req.body.householdType === "Landed" && req.body.unit !== "01-01") {
+        res.status(HTTP_STATUS.BAD_REQUEST).json({
+            statusCode: HTTP_STATUS.BAD_REQUEST,
+            message: 'Invalid unit number for \'Landed\' householdType. Refer to API documentations for more details.'
+        });
+        return;
+    }
+
     const householdObj: IHousehold = {
         householdType: req.body.householdType,
         address: req.body.address,
