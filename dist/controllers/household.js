@@ -14,16 +14,29 @@ const familyMember_model_1 = require("../models/familyMember.model");
 const ObjectId = require('mongoose').Types.ObjectId;
 const Household = require('../models/household.schema');
 const FamilyMember = require('../models/familyMember.schema');
+var StatusCode;
+(function (StatusCode) {
+    StatusCode[StatusCode["OK"] = 200] = "OK";
+    StatusCode[StatusCode["CREATED"] = 201] = "CREATED";
+    StatusCode[StatusCode["BAD_REQUEST"] = 400] = "BAD_REQUEST";
+    StatusCode[StatusCode["NOT_FOUND"] = 404] = "NOT_FOUND";
+})(StatusCode || (StatusCode = {}));
 // Creates a household record
 exports.createHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /* This is a check to ensure that the request body is not empty.
     If it is empty, it will return a 400 error. */
     if (Object.keys(req.body).length === 0) {
-        res.status(400).json({ message: 'Request body empty. Ensure data is submitted in JSON format.' });
+        res.status(StatusCode.BAD_REQUEST).json({
+            statusCode: StatusCode.BAD_REQUEST,
+            message: 'Request body empty. Ensure data is submitted in JSON format.'
+        });
         return;
     }
     if (!(0, household_model_1.isValidHouseholdType)(req.body.householdType)) {
-        res.status(400).json({ message: 'Invalid household type.' });
+        res.status(StatusCode.BAD_REQUEST).json({
+            statusCode: StatusCode.BAD_REQUEST,
+            message: 'Invalid household type.'
+        });
         return;
     }
     const householdObj = {
@@ -35,13 +48,17 @@ exports.createHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     const household = new Household(householdObj);
     try {
         const result = yield household.save();
-        res.status(201).json({
+        res.status(StatusCode.CREATED).json({
+            statusCode: StatusCode.CREATED,
             message: 'Household added successfully',
             householdId: result._id
         });
     }
     catch (e) {
-        res.status(400).json({ message: 'Fail to create household record, please check your request again.' });
+        res.status(StatusCode.BAD_REQUEST).json({
+            statusCode: StatusCode.BAD_REQUEST,
+            message: 'Fail to create household record, please check your request again.'
+        });
     }
 });
 // Add a family member to household
@@ -50,7 +67,8 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     /* This is a check to ensure that the request body is not empty.
     If it is empty, it will return a 400 error. */
     if (Object.keys(req.body).length === 0) {
-        res.status(400).json({
+        res.status(StatusCode.BAD_REQUEST).json({
+            statusCode: StatusCode.BAD_REQUEST,
             message: 'Request body empty. Ensure data is submitted in JSON format.'
         });
         return;
@@ -67,7 +85,10 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     if (!(0, familyMember_model_1.isValidDOB)(req.body.DOB_day, req.body.DOB_month, req.body.DOB_year))
         errMsg += "DOB, ";
     if (errMsg !== "Invalid field(s): ") {
-        res.status(400).json({ message: `${errMsg.slice(0, errMsg.length - 2)}.` });
+        res.status(StatusCode.BAD_REQUEST).json({
+            statusCode: StatusCode.BAD_REQUEST,
+            message: `${errMsg.slice(0, errMsg.length - 2)}.`
+        });
         return;
     }
     const familyMemberObj = {
@@ -79,31 +100,52 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         annualIncome: req.body.annualIncome,
         DOB: new Date(`${req.body.DOB_year}-${req.body.DOB_month}-${req.body.DOB_day}`)
     };
+    let householdJSON;
     try {
-        const householdJSON = yield Household.findById(ObjectId(req.params.id));
-        if (householdJSON) {
-            const familyMembers = householdJSON.get('familyMembers');
-            familyMembers.push(new FamilyMember(familyMemberObj));
-            const household = new Household({
-                _id: req.params.id,
-                householdType: householdJSON.get('householdType'),
-                street: householdJSON.get('street'),
-                unit: householdJSON.get('unit'),
-                postal: householdJSON.get('postal'),
-                familyMembers: familyMembers
-            });
-            const result = yield household.updateOne(household);
-            if (result.modifiedCount > 0)
-                res.status(200).json({ message: `${req.body.name} has been added to the household!` });
-            else
-                res.status(400).json({ message: "Family member is not recorded." });
-        }
-        else {
-            res.status(404).json({ message: 'Household record cannot be found!' });
-        }
+        householdJSON = yield Household.findById(ObjectId(req.params.id));
     }
     catch (e) {
-        res.status(404).json({ message: 'Household record cannot be found!' });
+        res.status(StatusCode.NOT_FOUND).json({
+            statusCode: StatusCode.NOT_FOUND,
+            message: 'An error has occurred when retrieving household record, please check your request again.'
+        });
+    }
+    if (householdJSON) {
+        const familyMembers = householdJSON.get('familyMembers');
+        familyMembers.push(new FamilyMember(familyMemberObj));
+        const household = new Household({
+            _id: req.params.id,
+            householdType: householdJSON.get('householdType'),
+            street: householdJSON.get('street'),
+            unit: householdJSON.get('unit'),
+            postal: householdJSON.get('postal'),
+            familyMembers: familyMembers
+        });
+        try {
+            const result = yield household.updateOne(household);
+            if (result.modifiedCount > 0)
+                res.status(StatusCode.OK).json({
+                    statusCode: StatusCode.OK,
+                    message: `${req.body.name} has been added to the household!`
+                });
+            else
+                res.status(StatusCode.BAD_REQUEST).json({
+                    statusCode: StatusCode.BAD_REQUEST,
+                    message: "Family member is not recorded."
+                });
+        }
+        catch (e) {
+            res.status(StatusCode.BAD_REQUEST).json({
+                statusCode: StatusCode.BAD_REQUEST,
+                message: 'An error has occurred when updating record, please check your request again.'
+            });
+        }
+    }
+    else {
+        res.status(StatusCode.NOT_FOUND).json({
+            statusCode: StatusCode.NOT_FOUND,
+            message: 'Household record cannot be found!'
+        });
     }
 });
 // List all households
@@ -123,10 +165,16 @@ exports.getAllHouseholds = (req, res, next) => __awaiter(void 0, void 0, void 0,
                 DOB: 1
             }
         });
-        res.status(200).json(households);
+        res.status(StatusCode.OK).json({
+            statusCode: StatusCode.OK,
+            result: households
+        });
     }
     catch (e) {
-        res.status(404).json({ message: 'An error has occurred, please check your request again.' });
+        res.status(StatusCode.NOT_FOUND).json({
+            statusCode: StatusCode.NOT_FOUND,
+            message: 'An error has occurred, please check your request again.'
+        });
     }
 });
 // Search for a specific household
@@ -146,12 +194,21 @@ exports.findHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             }
         });
         if (household)
-            res.status(200).json(household);
+            res.status(StatusCode.OK).json({
+                statusCode: StatusCode.OK,
+                result: household
+            });
         else
-            res.status(404).json({ message: 'Household not found!' });
+            res.status(StatusCode.NOT_FOUND).json({
+                statusCode: StatusCode.NOT_FOUND,
+                message: 'Household not found!'
+            });
     }
     catch (e) {
-        res.status(404).json({ message: 'An error has occurred, please check your request again.' });
+        res.status(StatusCode.BAD_REQUEST).json({
+            statusCode: StatusCode.BAD_REQUEST,
+            message: 'An error has occurred, please check your request again.'
+        });
     }
 });
 // List the households and qualifying members of grant disbursement
@@ -175,12 +232,21 @@ exports.findQualifyingHouseholds = (req, res, next) => __awaiter(void 0, void 0,
                 data = yield Household.yoloGstGrant();
                 break;
             default:
-                res.status(404).json({ message: 'Invalid argument.' });
+                res.status(StatusCode.NOT_FOUND).json({
+                    statusCode: StatusCode.NOT_FOUND,
+                    message: 'Invalid argument.'
+                });
                 break;
         }
-        res.status(200).json(data);
+        res.status(StatusCode.OK).json({
+            statusCode: StatusCode.OK,
+            result: data
+        });
     }
     catch (e) {
-        res.status(404).json({ message: e });
+        res.status(StatusCode.BAD_REQUEST).json({
+            statusCode: StatusCode.BAD_REQUEST,
+            message: 'An error has occurred, please check your request again.'
+        });
     }
 });
