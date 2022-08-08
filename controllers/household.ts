@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import {IHousehold, isValidHouseholdType} from "../models/household.model";
+import {IHousehold, isValidHouseholdType, isValidPostal, isValidUnit} from "../models/household.model";
 import {
     IFamilyMember,
     isValidDecimal,
@@ -33,10 +33,19 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
         return;
     }
 
-    if (!isValidHouseholdType(req.body.householdType)) {
+    let errMsg = "Invalid field(s): ";
+    if (!isValidHouseholdType(req.body.householdType))
+        errMsg += "housing type, ";
+    if (!req.body.street)
+        errMsg += "street, ";
+    if (!isValidUnit(req.body.unit))
+        errMsg += "unit, ";
+    if (!isValidPostal(req.body.postal))
+        errMsg += "postal, ";
+    if (errMsg !== "Invalid field(s): ") {
         res.status(StatusCode.BAD_REQUEST).json({
             statusCode: StatusCode.BAD_REQUEST,
-            message: 'Invalid household type.'
+            message: `${errMsg.slice(0, errMsg.length - 2)}.`
         });
         return;
     }
@@ -55,7 +64,7 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
         res.status(StatusCode.CREATED).json({
             statusCode: StatusCode.CREATED,
             message: 'Household added successfully',
-            householdId: result._id
+            _id: result._id
         });
     } catch (e) {
         res.status(StatusCode.BAD_REQUEST).json({

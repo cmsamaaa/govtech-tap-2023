@@ -25,7 +25,7 @@ const householdSchema = new mongoose_1.Schema({
         required: true
     },
     postal: {
-        type: Number,
+        type: String,
         required: true
     },
     familyMembers: [

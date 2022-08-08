@@ -17,7 +17,7 @@ const householdSchema: Schema<IHousehold> = new Schema<IHousehold>({
         required: true
     },
     postal: {
-        type: Number,
+        type: String,
         required: true
     },
     familyMembers: [

@@ -32,10 +32,19 @@ exports.createHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         });
         return;
     }
-    if (!(0, household_model_1.isValidHouseholdType)(req.body.householdType)) {
+    let errMsg = "Invalid field(s): ";
+    if (!(0, household_model_1.isValidHouseholdType)(req.body.householdType))
+        errMsg += "housing type, ";
+    if (!req.body.street)
+        errMsg += "street, ";
+    if (!(0, household_model_1.isValidUnit)(req.body.unit))
+        errMsg += "unit, ";
+    if (!(0, household_model_1.isValidPostal)(req.body.postal))
+        errMsg += "postal, ";
+    if (errMsg !== "Invalid field(s): ") {
         res.status(StatusCode.BAD_REQUEST).json({
             statusCode: StatusCode.BAD_REQUEST,
-            message: 'Invalid household type.'
+            message: `${errMsg.slice(0, errMsg.length - 2)}.`
         });
         return;
     }
@@ -51,7 +60,7 @@ exports.createHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         res.status(StatusCode.CREATED).json({
             statusCode: StatusCode.CREATED,
             message: 'Household added successfully',
-            householdId: result._id
+            _id: result._id
         });
     }
     catch (e) {
