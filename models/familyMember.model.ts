@@ -1,5 +1,4 @@
 import { Schema } from "mongoose";
-import {HouseholdType} from "./household.model";
 
 export type Gender = 'Male' | 'Female' | 'Non-binary';
 export type MaritalStatus = 'Single' | 'Married' | 'Divorced';
