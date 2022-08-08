@@ -12,22 +12,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const household_model_1 = require("../models/household.model");
 const familyMember_model_1 = require("../models/familyMember.model");
 const ObjectId = require('mongoose').Types.ObjectId;
+const http_status_1 = require("../constants/http_status");
 const Household = require('../models/household.schema');
 const FamilyMember = require('../models/familyMember.schema');
-var StatusCode;
-(function (StatusCode) {
-    StatusCode[StatusCode["OK"] = 200] = "OK";
-    StatusCode[StatusCode["CREATED"] = 201] = "CREATED";
-    StatusCode[StatusCode["BAD_REQUEST"] = 400] = "BAD_REQUEST";
-    StatusCode[StatusCode["NOT_FOUND"] = 404] = "NOT_FOUND";
-})(StatusCode || (StatusCode = {}));
 // Creates a household record
 exports.createHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /* This is a check to ensure that the request body is not empty.
     If it is empty, it will return a 400 error. */
     if (Object.keys(req.body).length === 0) {
-        res.status(StatusCode.BAD_REQUEST).json({
-            statusCode: StatusCode.BAD_REQUEST,
+        res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
+            statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
             message: 'Request body empty. Ensure request is submitted in JSON format.'
         });
         return;
@@ -42,8 +36,8 @@ exports.createHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     if (!(0, household_model_1.isValidPostal)(req.body.postal))
         errMsg += "postal, ";
     if (errMsg !== "Invalid field(s): ") {
-        res.status(StatusCode.BAD_REQUEST).json({
-            statusCode: StatusCode.BAD_REQUEST,
+        res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
+            statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
             message: `${errMsg.slice(0, errMsg.length - 2)}.`
         });
         return;
@@ -57,15 +51,15 @@ exports.createHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     const household = new Household(householdObj);
     try {
         const result = yield household.save();
-        res.status(StatusCode.CREATED).json({
-            statusCode: StatusCode.CREATED,
+        res.status(http_status_1.HTTP_STATUS.CREATED).json({
+            statusCode: http_status_1.HTTP_STATUS.CREATED,
             message: 'Household added successfully',
             _id: result._id
         });
     }
     catch (e) {
-        res.status(StatusCode.BAD_REQUEST).json({
-            statusCode: StatusCode.BAD_REQUEST,
+        res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
+            statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
             message: 'Fail to create household record, please check your request again.'
         });
     }
@@ -76,8 +70,8 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     /* This is a check to ensure that the request body is not empty.
     If it is empty, it will return a 400 error. */
     if (Object.keys(req.body).length === 0) {
-        res.status(StatusCode.BAD_REQUEST).json({
-            statusCode: StatusCode.BAD_REQUEST,
+        res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
+            statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
             message: 'Request body empty. Ensure request is submitted in JSON format.'
         });
         return;
@@ -96,8 +90,8 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     if (!(0, familyMember_model_1.isValidDOB)(req.body.DOB_day, req.body.DOB_month, req.body.DOB_year))
         errMsg += "DOB, ";
     if (errMsg !== "Invalid field(s): ") {
-        res.status(StatusCode.BAD_REQUEST).json({
-            statusCode: StatusCode.BAD_REQUEST,
+        res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
+            statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
             message: `${errMsg.slice(0, errMsg.length - 2)}.`
         });
         return;
@@ -116,8 +110,8 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         householdJSON = yield Household.findById(ObjectId(req.params.id));
     }
     catch (e) {
-        res.status(StatusCode.BAD_REQUEST).json({
-            statusCode: StatusCode.BAD_REQUEST,
+        res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
+            statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
             message: 'An error has occurred when retrieving household record, please check your request again.'
         });
     }
@@ -132,8 +126,8 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
                 }
             }
             if (!isFound) {
-                res.status(StatusCode.BAD_REQUEST).json({
-                    statusCode: StatusCode.BAD_REQUEST,
+                res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
+                    statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
                     message: 'An error has occurred. This is due to an invalid spouse id or a different spouse name being provided from the original record.'
                 });
                 return;
@@ -151,26 +145,26 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         try {
             const result = yield household.updateOne(household);
             if (result.modifiedCount > 0)
-                res.status(StatusCode.OK).json({
-                    statusCode: StatusCode.OK,
+                res.status(http_status_1.HTTP_STATUS.OK).json({
+                    statusCode: http_status_1.HTTP_STATUS.OK,
                     message: `${req.body.name} has been added to the household!`
                 });
             else
-                res.status(StatusCode.BAD_REQUEST).json({
-                    statusCode: StatusCode.BAD_REQUEST,
+                res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
+                    statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
                     message: "Family member is not recorded."
                 });
         }
         catch (e) {
-            res.status(StatusCode.BAD_REQUEST).json({
-                statusCode: StatusCode.BAD_REQUEST,
+            res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
+                statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
                 message: 'An error has occurred when updating record, please check your request again.'
             });
         }
     }
     else {
-        res.status(StatusCode.NOT_FOUND).json({
-            statusCode: StatusCode.NOT_FOUND,
+        res.status(http_status_1.HTTP_STATUS.NOT_FOUND).json({
+            statusCode: http_status_1.HTTP_STATUS.NOT_FOUND,
             message: 'Household record cannot be found!'
         });
     }
@@ -195,14 +189,14 @@ exports.getAllHouseholds = (req, res, next) => __awaiter(void 0, void 0, void 0,
                 DOB: 1
             }
         });
-        res.status(StatusCode.OK).json({
-            statusCode: StatusCode.OK,
+        res.status(http_status_1.HTTP_STATUS.OK).json({
+            statusCode: http_status_1.HTTP_STATUS.OK,
             result: households
         });
     }
     catch (e) {
-        res.status(StatusCode.NOT_FOUND).json({
-            statusCode: StatusCode.NOT_FOUND,
+        res.status(http_status_1.HTTP_STATUS.NOT_FOUND).json({
+            statusCode: http_status_1.HTTP_STATUS.NOT_FOUND,
             message: 'An error has occurred, please check your request again.'
         });
     }
@@ -228,19 +222,19 @@ exports.findHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             }
         });
         if (household)
-            res.status(StatusCode.OK).json({
-                statusCode: StatusCode.OK,
+            res.status(http_status_1.HTTP_STATUS.OK).json({
+                statusCode: http_status_1.HTTP_STATUS.OK,
                 result: household
             });
         else
-            res.status(StatusCode.NOT_FOUND).json({
-                statusCode: StatusCode.NOT_FOUND,
+            res.status(http_status_1.HTTP_STATUS.NOT_FOUND).json({
+                statusCode: http_status_1.HTTP_STATUS.NOT_FOUND,
                 message: 'Household not found!'
             });
     }
     catch (e) {
-        res.status(StatusCode.BAD_REQUEST).json({
-            statusCode: StatusCode.BAD_REQUEST,
+        res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
+            statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
             message: 'An error has occurred, please check your request again.'
         });
     }
@@ -266,20 +260,20 @@ exports.findQualifyingHouseholds = (req, res, next) => __awaiter(void 0, void 0,
                 data = yield Household.yoloGstGrant();
                 break;
             default:
-                res.status(StatusCode.NOT_FOUND).json({
-                    statusCode: StatusCode.NOT_FOUND,
+                res.status(http_status_1.HTTP_STATUS.NOT_FOUND).json({
+                    statusCode: http_status_1.HTTP_STATUS.NOT_FOUND,
                     message: 'Invalid argument.'
                 });
                 break;
         }
-        res.status(StatusCode.OK).json({
-            statusCode: StatusCode.OK,
+        res.status(http_status_1.HTTP_STATUS.OK).json({
+            statusCode: http_status_1.HTTP_STATUS.OK,
             result: data
         });
     }
     catch (e) {
-        res.status(StatusCode.BAD_REQUEST).json({
-            statusCode: StatusCode.BAD_REQUEST,
+        res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
+            statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
             message: 'An error has occurred, please check your request again.'
         });
     }
