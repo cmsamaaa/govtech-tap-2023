@@ -52,17 +52,33 @@ In the project directory, you may run the following commands in the terminal:
     }
 
 ## API Documentation
-This API only supports JSON format. Please ensure that `Content-Type: application/json` is set in the request header.
-1. [Create Household](#Create Household)
-2. [Add a family member to household](#Add a family member to household)
-3. [List all households](#List all households)
-4. [Search for a specific household](#Search for a specific household)
-5. [List household and family members that qualify for grants](#List household and family members that qualify for grants)
+This API supports JSON format. Please ensure that `Content-Type: application/json` is set in the request header.
 
-### Create Household
+### 1. Create Household
 ```http
 POST /household/create
 ```
+#### Request Body:
+```javascript
+{
+    "householdType": String,
+    "address": String,
+    "unit": String,
+    "postal": String
+}
+```
+Constraints:  
+- Household Type
+  - "HDB" or "Condominium" or "Landed"  ✔️
+  - Any other string combinations ❌
+- Unit 
+  - Two digits, followed by a hyphen, followed by minimum two up to four digits  (e.g "12-99" or "08-4321") ✔️
+  - For landed, you must enter unit as "01-01" ✔️
+  - Any other string combinations (e.g. "1-321") ❌
+- Postal 
+  - Six digits (e.g. 123456) ✔️
+  - Any other string combinations (e.g. 1a2b3c) ❌
+
 #### Responses:
 ```javascript
 // Valid Request Reponse
@@ -81,12 +97,49 @@ POST /household/create
     "message"    : String
 }
 ```
+<br/>
 
-### Add a family member to household
+### 2. Add a family member to household
 ```http
 PUT /household/add-member/:id
 ```
 Substitute `:id` with a household record's id retrieved from the database.
+#### Request Body:
+```javascript
+{
+    "name": String,
+    "gender": String,
+    "maritalStatus": String,
+    "spouse"?: String | ObjectId,
+    "occupationType": String,
+    "annualIncome": Number,
+    "DOB_day": String,
+    "DOB_month": String,
+    "DOB_year": String
+}
+```
+Constraints:  
+- Gender
+  - "Male" or "Female" or "Non-binary"  ✔️
+  - Any other string combinations ❌
+- Marital Status
+  - "Single" or "Married" or "Divorced" or "Widowed"  ✔️
+  - Any other string combinations ❌
+- Spouse (optional) 
+  - Must include spouse name or id if "Married"
+  - Spouse id must exist within household's family members
+  - Error will be thrown if spouse id cannot be found within the same household's family members ❌
+- Occupation Type
+  - "Unemployed" or "Student" or "Employed"  ✔️
+  - Any other string combinations ❌
+- Annual Income
+  - Whole numbers and decimals   ✔️
+  - Any other string combinations ❌
+- DOB (Date of Birth)
+  - Day and month must be two digits (e.g. 01 or 12) ✔️
+  - Year must be four digits (e.g. 1998 or 2020) ✔️
+  - Any other string combinations ❌
+
 #### Responses:
 ```javascript
 // Valid Request Reponse
@@ -103,8 +156,9 @@ Substitute `:id` with a household record's id retrieved from the database.
     "message"    : String
 }
 ```
+<br/>
 
-### List all households
+### 3. List all households
 ```http
 GET /household/all
 ```
@@ -125,8 +179,9 @@ GET /household/all
     "message"    : String
 }
 ```
+<br/>
 
-### Search for a specific household
+### 4. Search for a specific household
 ```http
 GET /household/find/:id
 ```
@@ -148,8 +203,9 @@ Substitute `:id` with a household record's id retrieved from the database.
     "message"    : String
 }
 ```
+<br/>
 
-### List household and family members that qualify for grants
+### 5. List household and family members that qualify for grants
 ```http
 GET /household/find-qualifying/:option
 ```
