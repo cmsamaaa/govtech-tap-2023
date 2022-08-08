@@ -31,6 +31,9 @@ const householdSchema = new mongoose_1.Schema({
     familyMembers: [
         FamilyMember.schema
     ]
+}, {
+    timestamps: true,
+    versionKey: false
 });
 // Student Encouragement Bonus
 householdSchema.statics.studentEncouragementBonus = function () {

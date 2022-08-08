@@ -29,5 +29,8 @@ const familyMemberSchema = new mongoose_1.Schema({
         type: Date,
         required: true
     }
+}, {
+    timestamps: false,
+    versionKey: false
 });
 module.exports = (0, mongoose_1.model)('FamilyMembers', familyMemberSchema);

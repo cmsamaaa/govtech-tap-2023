@@ -15,8 +15,6 @@ import {HTTP_STATUS} from "../constants/http_status";
 const Household = require('../models/household.schema');
 const FamilyMember = require('../models/familyMember.schema');
 
-
-
 // Creates a household record
 exports.createHousehold = async (req: Request, res: Response, next: NextFunction) => {
     /* This is a check to ensure that the request body is not empty.
@@ -185,23 +183,7 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
 // List all households
 exports.getAllHouseholds = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const households = await Household.find().select({
-            _id: 1,
-            householdType: 1,
-            address: 1,
-            unit: 1,
-            postal: 1,
-            familyMembers: {
-                _id: 1,
-                name: 1,
-                gender: 1,
-                maritalStatus: 1,
-                spouse: 1,
-                occupationType: 1,
-                annualIncome: 1,
-                DOB: 1
-            }
-        });
+        const households = await Household.find();
 
         res.status(HTTP_STATUS.OK).json({
             statusCode: HTTP_STATUS.OK,
@@ -218,23 +200,7 @@ exports.getAllHouseholds = async (req: Request, res: Response, next: NextFunctio
 // Search for a specific household
 exports.findHousehold = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const household = await Household.findById(ObjectId(req.params.id)).select({
-            _id: 1,
-            householdType: 1,
-            address: 1,
-            unit: 1,
-            postal: 1,
-            familyMembers: {
-                _id: 1,
-                name: 1,
-                gender: 1,
-                maritalStatus: 1,
-                spouse: 1,
-                occupationType: 1,
-                annualIncome: 1,
-                DOB: 1
-            }
-        });
+        const household = await Household.findById(ObjectId(req.params.id));
 
         if (household)
             res.status(HTTP_STATUS.OK).json({

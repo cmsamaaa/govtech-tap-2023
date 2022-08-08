@@ -172,23 +172,7 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
 // List all households
 exports.getAllHouseholds = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const households = yield Household.find().select({
-            _id: 1,
-            householdType: 1,
-            address: 1,
-            unit: 1,
-            postal: 1,
-            familyMembers: {
-                _id: 1,
-                name: 1,
-                gender: 1,
-                maritalStatus: 1,
-                spouse: 1,
-                occupationType: 1,
-                annualIncome: 1,
-                DOB: 1
-            }
-        });
+        const households = yield Household.find();
         res.status(http_status_1.HTTP_STATUS.OK).json({
             statusCode: http_status_1.HTTP_STATUS.OK,
             result: households
@@ -204,23 +188,7 @@ exports.getAllHouseholds = (req, res, next) => __awaiter(void 0, void 0, void 0,
 // Search for a specific household
 exports.findHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const household = yield Household.findById(ObjectId(req.params.id)).select({
-            _id: 1,
-            householdType: 1,
-            address: 1,
-            unit: 1,
-            postal: 1,
-            familyMembers: {
-                _id: 1,
-                name: 1,
-                gender: 1,
-                maritalStatus: 1,
-                spouse: 1,
-                occupationType: 1,
-                annualIncome: 1,
-                DOB: 1
-            }
-        });
+        const household = yield Household.findById(ObjectId(req.params.id));
         if (household)
             res.status(http_status_1.HTTP_STATUS.OK).json({
                 statusCode: http_status_1.HTTP_STATUS.OK,
