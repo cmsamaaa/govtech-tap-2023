@@ -4,7 +4,7 @@ const householdController = require('../controllers/household');
 
 const router = express.Router();
 
-router.get('/', householdController.getAllHouseholds);
+router.get('/all', householdController.getAllHouseholds);
 router.get('/find/:id', householdController.findHousehold);
 router.get('/find-qualifying/:option', householdController.findQualifyingHouseholds);
 router.post('/create', householdController.createHousehold);
