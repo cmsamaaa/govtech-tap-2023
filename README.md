@@ -8,6 +8,20 @@ This project is written in NodeJs with TypeScript, using Express.js framework wi
 - [Getting Started](#getting-started)
 - [Dependencies](#dependencies)
 - [API Documentation](#api-documentation)
+   1. [Create household](#1-create-household)
+      - [Request Body](#request-body)
+      - [Constraints](#constraints)
+      - [Responses](#constraints)
+   2. [Add a family member to household](#2-add-a-family-member-to-household)
+      - [Request Body](#request-body)
+      - [Constraints](#constraints)
+      - [Responses](#constraints)
+   3. [List all households](#3-list-all-households)
+      - [Responses](#constraints)
+   4. [Search for a specific household](#4-search-for-a-specific-household)
+      - [Responses](#constraints)
+   5. [List household and family members that qualify for grants](#5-list-household-and-family-members-that-qualify-for-grants)
+      - [Responses](#constraints)
 - [Status Codes](#status-codes)
 
 ## Getting Started
@@ -54,7 +68,7 @@ In the project directory, you may run the following commands in the terminal:
 ## API Documentation
 This API supports JSON format. Please ensure that `Content-Type: application/json` is set in the request header.
 
-### 1. Create Household
+### 1. Create household
 ```http
 POST /household/create
 ```
@@ -67,7 +81,7 @@ POST /household/create
     "postal": String
 }
 ```
-Constraints:  
+#### Constraints:  
 - Household Type
   - "HDB" or "Condominium" or "Landed"  ✔️
   - Any other string combinations ❌
@@ -118,7 +132,7 @@ Substitute `:id` with a household record's id retrieved from the database.
     "DOB_year": String
 }
 ```
-Constraints:  
+#### Constraints:  
 - Gender
   - "Male" or "Female" or "Non-binary"  ✔️
   - Any other string combinations ❌
