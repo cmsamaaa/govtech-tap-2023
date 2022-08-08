@@ -124,21 +124,23 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
     if (householdJSON) {
         const familyMembers = householdJSON.get('familyMembers');
 
-        if (new ObjectId(req.body.spouse) == req.body.spouse) {
-            let isFound = false;
-            for (let i = 0; i < familyMembers.length; i++) {
-                if (familyMembers[i]._id == familyMemberObj.spouse && familyMembers[i].spouse === familyMemberObj.name) {
-                    isFound = true;
-                    break;
+        if (ObjectId.isValid(req.body.spouse)) {
+            if (new ObjectId(req.body.spouse) == req.body.spouse) {
+                let isFound = false;
+                for (let i = 0; i < familyMembers.length; i++) {
+                    if (familyMembers[i]._id == familyMemberObj.spouse && familyMembers[i].spouse === familyMemberObj.name) {
+                        isFound = true;
+                        break;
+                    }
                 }
-            }
 
-            if (!isFound) {
-                res.status(HTTP_STATUS.BAD_REQUEST).json({
-                    statusCode: HTTP_STATUS.BAD_REQUEST,
-                    message: 'An error has occurred. This is due to an invalid spouse id or a different spouse name being provided from the original record.'
-                });
-                return;
+                if (!isFound) {
+                    res.status(HTTP_STATUS.BAD_REQUEST).json({
+                        statusCode: HTTP_STATUS.BAD_REQUEST,
+                        message: 'An error has occurred. This is due to an invalid spouse id or a different spouse name being provided from the original record.'
+                    });
+                    return;
+                }
             }
         }
 
