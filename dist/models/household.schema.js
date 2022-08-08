@@ -40,7 +40,7 @@ householdSchema.statics.studentEncouragementBonus = function () {
                 $group: {
                     _id: '$_id',
                     householdType: { $first: '$householdType' },
-                    street: { $first: '$street' },
+                    address: { $first: '$address' },
                     unit: { $first: '$unit' },
                     postal: { $first: '$postal' },
                     householdIncome: { $sum: { $sum: '$familyMembers.annualIncome' } },
@@ -106,7 +106,7 @@ householdSchema.statics.multiGenerationScheme = function () {
                 $group: {
                     _id: '$_id',
                     householdType: { $first: '$householdType' },
-                    street: { $first: '$street' },
+                    address: { $first: '$address' },
                     unit: { $first: '$unit' },
                     postal: { $first: '$postal' },
                     householdIncome: { $sum: { $sum: '$familyMembers.annualIncome' } },
@@ -160,7 +160,7 @@ householdSchema.statics.elderBonus = function () {
                 $project: {
                     _id: '$_id',
                     householdType: '$householdType',
-                    street: '$street',
+                    address: '$address',
                     unit: '$unit',
                     postal: '$postal',
                     familyMembers: '$familyMembers'
@@ -221,7 +221,7 @@ householdSchema.statics.babySunshineGrant = function () {
                 $project: {
                     _id: '$_id',
                     householdType: '$householdType',
-                    street: '$street',
+                    address: '$address',
                     unit: '$unit',
                     postal: '$postal',
                     familyMembers: '$familyMembers'
@@ -279,7 +279,7 @@ householdSchema.statics.yoloGstGrant = function () {
                 $group: {
                     _id: '$_id',
                     householdType: { $first: '$householdType' },
-                    street: { $first: '$street' },
+                    address: { $first: '$address' },
                     unit: { $first: '$unit' },
                     postal: { $first: '$postal' },
                     householdIncome: { $sum: { $sum: '$familyMembers.annualIncome' } },

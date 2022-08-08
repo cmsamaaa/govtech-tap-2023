@@ -34,7 +34,7 @@ householdSchema.statics.studentEncouragementBonus = async function (this: Model<
                     {
                         _id: '$_id',
                         householdType: {$first: '$householdType'},
-                        street: {$first: '$street'},
+                        address: {$first: '$address'},
                         unit: {$first: '$unit'},
                         postal: {$first: '$postal'},
                         householdIncome: {$sum: {$sum: '$familyMembers.annualIncome'}},
@@ -105,7 +105,7 @@ householdSchema.statics.multiGenerationScheme = async function (this: Model<IHou
                     {
                         _id: '$_id',
                         householdType: {$first: '$householdType'},
-                        street: {$first: '$street'},
+                        address: {$first: '$address'},
                         unit: {$first: '$unit'},
                         postal: {$first: '$postal'},
                         householdIncome: {$sum: {$sum: '$familyMembers.annualIncome'}},
@@ -163,7 +163,7 @@ householdSchema.statics.elderBonus = async function (this: Model<IHousehold>) {
                     {
                         _id: '$_id',
                         householdType: '$householdType',
-                        street: '$street',
+                        address: '$address',
                         unit: '$unit',
                         postal: '$postal',
                         familyMembers: '$familyMembers'
@@ -229,7 +229,7 @@ householdSchema.statics.babySunshineGrant = async function (this: Model<IHouseho
                     {
                         _id: '$_id',
                         householdType: '$householdType',
-                        street: '$street',
+                        address: '$address',
                         unit: '$unit',
                         postal: '$postal',
                         familyMembers: '$familyMembers'
@@ -291,7 +291,7 @@ householdSchema.statics.yoloGstGrant = async function (this: Model<IHousehold>) 
                     {
                         _id: '$_id',
                         householdType: {$first: '$householdType'},
-                        street: {$first: '$street'},
+                        address: {$first: '$address'},
                         unit: {$first: '$unit'},
                         postal: {$first: '$postal'},
                         householdIncome: {$sum: {$sum: '$familyMembers.annualIncome'}},
