@@ -14,324 +14,8 @@ const familyMember_model_1 = require("../models/familyMember.model");
 const ObjectId = require('mongoose').Types.ObjectId;
 const Household = require('../models/household.schema');
 const FamilyMember = require('../models/familyMember.schema');
-// Student Encouragement Bonus
-const studentEncouragementBonus = () => __awaiter(void 0, void 0, void 0, function* () {
-    return Household.aggregate([
-        {
-            $group: {
-                _id: '$_id',
-                householdType: { $first: '$householdType' },
-                householdIncome: { $sum: { $sum: '$familyMembers.annualIncome' } },
-                familyMembers: { $first: '$familyMembers' }
-            }
-        },
-        {
-            $addFields: {
-                familyMembers: {
-                    $map: {
-                        input: '$familyMembers',
-                        as: 'fm',
-                        in: {
-                            $mergeObjects: [
-                                '$$fm', {
-                                    age: {
-                                        $dateDiff: {
-                                            startDate: '$$fm.DOB',
-                                            endDate: new Date(),
-                                            unit: 'year'
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        {
-            $match: {
-                $and: [
-                    { 'familyMembers.age': { $lt: 16 } },
-                    { 'familyMembers.occupationType': { $eq: 'Student' } },
-                    { 'householdIncome': { $lt: 200000 } }
-                ]
-            }
-        },
-        {
-            $addFields: {
-                familyMembers: {
-                    $filter: {
-                        input: '$familyMembers',
-                        as: 'fm',
-                        cond: {
-                            $and: [
-                                { $lt: ['$$fm.age', 16] },
-                                { $eq: ['$$fm.occupationType', 'Student'] }
-                            ]
-                        }
-                    }
-                }
-            }
-        }
-    ]);
-});
-// Multigeneration Scheme
-const multiGenerationScheme = () => __awaiter(void 0, void 0, void 0, function* () {
-    return Household.aggregate([
-        {
-            $group: {
-                _id: '$_id',
-                householdType: { $first: '$householdType' },
-                householdIncome: { $sum: { $sum: '$familyMembers.annualIncome' } },
-                familyMembers: { $first: '$familyMembers' }
-            }
-        },
-        {
-            $addFields: {
-                familyMembers: {
-                    $map: {
-                        input: '$familyMembers',
-                        as: 'fm',
-                        in: {
-                            $mergeObjects: [
-                                '$$fm', {
-                                    age: {
-                                        $dateDiff: {
-                                            startDate: '$$fm.DOB',
-                                            endDate: new Date(),
-                                            unit: 'year'
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        {
-            $match: {
-                $and: [
-                    {
-                        $or: [
-                            { 'familyMembers.age': { $lt: 18 } },
-                            { 'familyMembers.age': { $gt: 55 } }
-                        ]
-                    },
-                    { 'householdIncome': { $lt: 150000 } }
-                ]
-            }
-        }
-    ]);
-});
-// Elder Bonus
-const elderBonus = () => __awaiter(void 0, void 0, void 0, function* () {
-    return Household.aggregate([
-        {
-            $project: {
-                _id: '$_id',
-                householdType: '$householdType',
-                familyMembers: '$familyMembers'
-            }
-        },
-        {
-            $addFields: {
-                familyMembers: {
-                    $map: {
-                        input: '$familyMembers',
-                        as: 'fm',
-                        in: {
-                            $mergeObjects: [
-                                '$$fm', {
-                                    age: {
-                                        $dateDiff: {
-                                            startDate: '$$fm.DOB',
-                                            endDate: new Date(),
-                                            unit: 'year'
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        {
-            $match: {
-                $and: [
-                    { 'householdType': { $eq: 'HDB' } },
-                    { 'familyMembers.age': { $gte: 55 } }
-                ]
-            }
-        },
-        {
-            $addFields: {
-                familyMembers: {
-                    $filter: {
-                        input: '$familyMembers',
-                        as: 'fm',
-                        cond: {
-                            $gte: ['$$fm.age', 55]
-                        }
-                    }
-                }
-            }
-        }
-    ]);
-});
-// Baby Sunshine Grant
-const babySunshineGrant = () => __awaiter(void 0, void 0, void 0, function* () {
-    return Household.aggregate([
-        {
-            $project: {
-                _id: '$_id',
-                householdType: '$householdType',
-                familyMembers: '$familyMembers'
-            }
-        },
-        {
-            $addFields: {
-                familyMembers: {
-                    $map: {
-                        input: '$familyMembers',
-                        as: 'fm',
-                        in: {
-                            $mergeObjects: [
-                                '$$fm', {
-                                    age_month: {
-                                        $dateDiff: {
-                                            startDate: '$$fm.DOB',
-                                            endDate: new Date(),
-                                            unit: 'month'
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        {
-            $match: {
-                'familyMembers.age_month': { $lt: 8 }
-            }
-        },
-        {
-            $addFields: {
-                familyMembers: {
-                    $filter: {
-                        input: '$familyMembers',
-                        as: 'fm',
-                        cond: {
-                            $lt: ['$$fm.age_month', 8]
-                        }
-                    }
-                }
-            }
-        }
-    ]);
-});
-// YOLO GST Grant
-const yoloGstGrant = () => __awaiter(void 0, void 0, void 0, function* () {
-    return Household.aggregate([
-        {
-            $group: {
-                _id: '$_id',
-                householdType: { $first: '$householdType' },
-                householdIncome: { $sum: { $sum: '$familyMembers.annualIncome' } },
-                familyMembers: { $first: '$familyMembers' }
-            }
-        },
-        {
-            $match: {
-                $and: [
-                    { 'householdType': { $eq: 'HDB' } },
-                    { 'householdIncome': { $lt: 100000 } }
-                ]
-            }
-        }
-    ]);
-});
-// List the households and qualifying members of grant disbursement
-exports.findQualifyingHouseholds = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    let data;
-    switch (req.params.grantOption) {
-        case "0":
-            data = yield studentEncouragementBonus();
-            break;
-        case "1":
-            data = yield multiGenerationScheme();
-            break;
-        case "2":
-            data = yield elderBonus();
-            break;
-        case "3":
-            data = yield babySunshineGrant();
-            break;
-        case "4":
-            data = yield yoloGstGrant();
-            break;
-        default:
-            res.status(404).json({ message: 'Invalid argument.' });
-            break;
-    }
-    res.status(200).json(data);
-});
-// Retrieves all household records
-exports.getAllHouseholds = (req, res, next) => {
-    Household.find()
-        .select({
-        _id: 1,
-        householdType: 1,
-        familyMembers: {
-            name: 1,
-            gender: 1,
-            maritalStatus: 1,
-            spouse: 1,
-            occupationType: 1,
-            annualIncome: 1,
-            DOB: 1
-        }
-    })
-        .then((households) => {
-        if (households)
-            res.status(200).json(households);
-        else
-            res.status(404).json({ message: 'Household not found!' });
-    })
-        .catch((err) => {
-        res.json({ message: err });
-    });
-};
-// Retrieves a household records by ID
-exports.findHousehold = (req, res, next) => {
-    Household.findById(ObjectId(req.params.id))
-        .select({
-        _id: 1,
-        householdType: 1,
-        familyMembers: {
-            name: 1,
-            gender: 1,
-            maritalStatus: 1,
-            occupationType: 1,
-            annualIncome: 1,
-            DOB: 1
-        }
-    })
-        .then((household) => {
-        if (household)
-            res.status(200).json(household);
-        else
-            res.status(404).json({ message: 'Household not found!' });
-    })
-        .catch((err) => {
-        res.json({ message: err });
-    });
-};
 // Creates a household record
-exports.createHousehold = (req, res, next) => {
+exports.createHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /* This is a check to ensure that the request body is not empty.
     If it is empty, it will return a 400 error. */
     if (Object.keys(req.body).length === 0) {
@@ -349,19 +33,19 @@ exports.createHousehold = (req, res, next) => {
         postal: req.body.postal
     };
     const household = new Household(householdObj);
-    household.save()
-        .then((result) => {
+    try {
+        const result = yield household.save();
         res.status(201).json({
             message: 'Household added successfully',
             householdId: result._id
         });
-    })
-        .catch((err) => {
-        res.status(400).json({ message: err });
-    });
-};
-// Add a family member into household record
-exports.addFamilyMember = (req, res, next) => {
+    }
+    catch (e) {
+        res.status(400).json({ message: 'Fail to create household record, please check your request again.' });
+    }
+});
+// Add a family member to household
+exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     /* This is a check to ensure that the request body is not empty.
     If it is empty, it will return a 400 error. */
@@ -395,31 +79,108 @@ exports.addFamilyMember = (req, res, next) => {
         annualIncome: req.body.annualIncome,
         DOB: new Date(`${req.body.DOB_year}-${req.body.DOB_month}-${req.body.DOB_day}`)
     };
-    Household.findById(ObjectId(req.params.id)).then((households) => {
-        if (households) {
-            let familyMembers = households.get('familyMembers');
+    try {
+        const householdJSON = yield Household.findById(ObjectId(req.params.id));
+        if (householdJSON) {
+            const familyMembers = householdJSON.get('familyMembers');
             familyMembers.push(new FamilyMember(familyMemberObj));
             const household = new Household({
                 _id: req.params.id,
-                householdType: households.get('householdType'),
-                street: households.get('street'),
-                unit: households.get('unit'),
-                postal: households.get('postal'),
+                householdType: householdJSON.get('householdType'),
+                street: householdJSON.get('street'),
+                unit: householdJSON.get('unit'),
+                postal: householdJSON.get('postal'),
                 familyMembers: familyMembers
             });
-            household.updateOne(household)
-                .then((result) => {
-                if (result.modifiedCount > 0)
-                    res.status(200).json({ message: `${req.body.name} has been added to the household!` });
-                else
-                    res.status(400).json({ message: "Family member is not recorded." });
-            })
-                .catch((err) => {
-                res.status(404).json({ message: err });
-            });
+            const result = yield household.updateOne(household);
+            if (result.modifiedCount > 0)
+                res.status(200).json({ message: `${req.body.name} has been added to the household!` });
+            else
+                res.status(400).json({ message: "Family member is not recorded." });
         }
         else {
-            res.status(404).json({ message: 'Household not found!' });
+            res.status(404).json({ message: 'Household record cannot be found!' });
         }
-    });
-};
+    }
+    catch (e) {
+        res.status(404).json({ message: 'Household record cannot be found!' });
+    }
+});
+// List all households
+exports.getAllHouseholds = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const households = yield Household.find()
+            .select({
+            _id: 1,
+            householdType: 1,
+            familyMembers: {
+                name: 1,
+                gender: 1,
+                maritalStatus: 1,
+                spouse: 1,
+                occupationType: 1,
+                annualIncome: 1,
+                DOB: 1
+            }
+        });
+        res.status(200).json(households);
+    }
+    catch (e) {
+        res.status(404).json({ message: 'An error has occurred, please check your request again.' });
+    }
+});
+// Search for a specific household
+exports.findHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const household = yield Household.findById(ObjectId(req.params.id))
+            .select({
+            _id: 1,
+            householdType: 1,
+            familyMembers: {
+                name: 1,
+                gender: 1,
+                maritalStatus: 1,
+                occupationType: 1,
+                annualIncome: 1,
+                DOB: 1
+            }
+        });
+        if (household)
+            res.status(200).json(household);
+        else
+            res.status(404).json({ message: 'Household not found!' });
+    }
+    catch (e) {
+        res.status(404).json({ message: 'An error has occurred, please check your request again.' });
+    }
+});
+// List the households and qualifying members of grant disbursement
+exports.findQualifyingHouseholds = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let data;
+        switch (req.params.option) {
+            case "0":
+                data = yield Household.studentEncouragementBonus();
+                break;
+            case "1":
+                data = yield Household.multiGenerationScheme();
+                break;
+            case "2":
+                data = yield Household.elderBonus();
+                break;
+            case "3":
+                data = yield Household.babySunshineGrant();
+                break;
+            case "4":
+                data = yield Household.yoloGstGrant();
+                break;
+            default:
+                res.status(404).json({ message: 'Invalid argument.' });
+                break;
+        }
+        res.status(200).json(data);
+    }
+    catch (e) {
+        res.status(404).json({ message: e });
+    }
+});
