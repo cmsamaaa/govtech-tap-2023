@@ -8,7 +8,7 @@ const householdSchema: Schema<IHousehold> = new Schema<IHousehold>({
         type: String,
         required: true
     },
-    street: {
+    address: {
         type: String,
         required: true
     },

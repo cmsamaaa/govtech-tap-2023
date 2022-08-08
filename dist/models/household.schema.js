@@ -16,7 +16,7 @@ const householdSchema = new mongoose_1.Schema({
         type: String,
         required: true
     },
-    street: {
+    address: {
         type: String,
         required: true
     },

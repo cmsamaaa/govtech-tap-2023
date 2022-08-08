@@ -36,8 +36,8 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
     let errMsg = "Invalid field(s): ";
     if (!isValidHouseholdType(req.body.householdType))
         errMsg += "housing type, ";
-    if (!req.body.street)
-        errMsg += "street, ";
+    if (!req.body.address)
+        errMsg += "address, ";
     if (!isValidUnit(req.body.unit))
         errMsg += "unit, ";
     if (!isValidPostal(req.body.postal))
@@ -52,7 +52,7 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
 
     const householdObj: IHousehold = {
         householdType: req.body.householdType,
-        street: req.body.street,
+        address: req.body.address,
         unit: req.body.unit,
         postal: req.body.postal
     };
@@ -132,7 +132,7 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
         const household = new Household({
             _id: req.params.id,
             householdType: householdJSON.get('householdType'),
-            street: householdJSON.get('street'),
+            address: householdJSON.get('address'),
             unit: householdJSON.get('unit'),
             postal: householdJSON.get('postal'),
             familyMembers: familyMembers
@@ -171,7 +171,7 @@ exports.getAllHouseholds = async (req: Request, res: Response, next: NextFunctio
         const households = await Household.find().select({
             _id: 1,
             householdType: 1,
-            street: 1,
+            address: 1,
             unit: 1,
             postal: 1,
             familyMembers: {
@@ -204,7 +204,7 @@ exports.findHousehold = async (req: Request, res: Response, next: NextFunction) 
         const household = await Household.findById(ObjectId(req.params.id)).select({
             _id: 1,
             householdType: 1,
-            street: 1,
+            address: 1,
             unit: 1,
             postal: 1,
             familyMembers: {

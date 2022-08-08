@@ -5,7 +5,7 @@ export type HouseholdType = 'Landed' | 'Condominium' | 'HDB';
 export interface IHousehold {
     _id?: Schema.Types.ObjectId;
     householdType: HouseholdType;
-    street: String;
+    address: String;
     unit: String;
     postal: String;
     familyMembers?: [];

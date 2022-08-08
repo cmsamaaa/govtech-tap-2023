@@ -35,8 +35,8 @@ exports.createHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     let errMsg = "Invalid field(s): ";
     if (!(0, household_model_1.isValidHouseholdType)(req.body.householdType))
         errMsg += "housing type, ";
-    if (!req.body.street)
-        errMsg += "street, ";
+    if (!req.body.address)
+        errMsg += "address, ";
     if (!(0, household_model_1.isValidUnit)(req.body.unit))
         errMsg += "unit, ";
     if (!(0, household_model_1.isValidPostal)(req.body.postal))
@@ -50,7 +50,7 @@ exports.createHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     }
     const householdObj = {
         householdType: req.body.householdType,
-        street: req.body.street,
+        address: req.body.address,
         unit: req.body.unit,
         postal: req.body.postal
     };
@@ -125,7 +125,7 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         const household = new Household({
             _id: req.params.id,
             householdType: householdJSON.get('householdType'),
-            street: householdJSON.get('street'),
+            address: householdJSON.get('address'),
             unit: householdJSON.get('unit'),
             postal: householdJSON.get('postal'),
             familyMembers: familyMembers
@@ -163,7 +163,7 @@ exports.getAllHouseholds = (req, res, next) => __awaiter(void 0, void 0, void 0,
         const households = yield Household.find().select({
             _id: 1,
             householdType: 1,
-            street: 1,
+            address: 1,
             unit: 1,
             postal: 1,
             familyMembers: {
@@ -195,7 +195,7 @@ exports.findHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         const household = yield Household.findById(ObjectId(req.params.id)).select({
             _id: 1,
             householdType: 1,
-            street: 1,
+            address: 1,
             unit: 1,
             postal: 1,
             familyMembers: {
