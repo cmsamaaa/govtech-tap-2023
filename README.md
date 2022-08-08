@@ -1,8 +1,18 @@
 # govtech-tap-2023
 
 #### METEOR TAP Assessment 2023
-For this technical assessment, I chose to attempt the backend (RESTful API) project.
-This project is written in NodeJs with TypeScript, using Express.js framework with MongoDB database.
+For this technical assessment, I chose to attempt the backend (RESTful API) project. This project is written in NodeJs 
+with TypeScript, using Express.js framework with MongoDB database.
+
+When I received the email notifying me of this assessment, I spontaneously decided on NodeJs as it is very a rather 
+popular JavaScript runtime environment being widely used today. However, I wanted to challenge myself, as I have had 
+prior experiences writing in JavaScript. This is when I decided to write this program in an unfamiliar language 
+(as an opportunity for me to learn). 
+
+TypeScript, which is often deemed as the more "reliable" JavaScript, while still being able to work with NodeJs, the 
+Express.js framework, and it works well with a popular non-relational database, MongoDB. TypeScript allows for easier 
+code refactoring, better readability due to specifying strict types and its support of OOP paradigm, along with the 
+aforementioned reasons, I have hence chose TypeScript.
 
 ## Table of contents
 - [Getting Started](#getting-started)
@@ -67,6 +77,14 @@ In the project directory, you may run the following commands in the terminal:
 
 ## API Documentation
 This API supports JSON format. Please ensure that `Content-Type: application/json` is set in the request header.
+
+When a request is sent to a non-existing endpoint, the following JSON response will be thrown:
+```javascript
+{
+    "statusCode": 404,
+    "message": "Invalid API endpoint."
+}
+```
 
 ### 1. Create household
 ```http
