@@ -119,8 +119,8 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
     try {
         householdJSON = await Household.findById(ObjectId(req.params.id));
     } catch (e) {
-        res.status(StatusCode.NOT_FOUND).json({
-            statusCode: StatusCode.NOT_FOUND,
+        res.status(StatusCode.BAD_REQUEST).json({
+            statusCode: StatusCode.BAD_REQUEST,
             message: 'An error has occurred when retrieving household record, please check your request again.'
         });
     }
