@@ -99,7 +99,14 @@ POST /household/create
     "postal": String
 }
 ```
-#### Constraints:  
+| Parameter       | Type     | Description                                       |
+|:----------------|:---------|:--------------------------------------------------|
+| `householdType` | `string` | **Required**. "HDB" or "Condominium" or "Landed". |
+| `address`       | `string` | **Required**. Block and street name.              |
+| `unit`          | `string` | **Required**. Unit number of the apartment.       |
+| `postal`        | `string` | **Required**. Postal code.                        |
+#### Constraints:
+
 - Household Type
   - "HDB" or "Condominium" or "Landed"  ✔️
   - Any other string combinations ❌
@@ -135,7 +142,9 @@ POST /household/create
 ```http
 PUT /household/add-member/:id
 ```
-Substitute `:id` with a household record's id retrieved from the database.
+| Parameter | Type                   | Description                           |
+|:----------|:-----------------------|:--------------------------------------|
+| `:id`     | `string` or `ObjectId` | **Required**. Household object `_id`. |
 #### Request Body:
 ```javascript
 {
@@ -150,6 +159,17 @@ Substitute `:id` with a household record's id retrieved from the database.
     "DOB_year": String
 }
 ```
+| Parameter        | Type                   | Description                                                     |
+|:-----------------|:-----------------------|:----------------------------------------------------------------|
+| `name`           | `string`               | **Required**. Full name.                                        |
+| `gender`         | `string`               | **Required**. "Male" or "Female" or "Non-binary".               |
+| `maritalStatus`  | `string`               | **Required**. "Single" or "Married" or "Divorced" or "Widowed". |
+| `spouse`         | `string` or `ObjectId` | **Optional**. Name or `_id` of spouse.                          |
+| `occupationType` | `string`               | **Required**. "Unemployed" or "Student" or "Employed".          |
+| `annualIncome`   | `decimal`              | **Required**. Annual income of the person.                      |
+| `DOB_day`        | `string`               | **Required**. Day segment of the date of birth.                 |
+| `DOB_month`      | `string`               | **Required**. Month segment of the date of birth.               |
+| `DOB_year`       | `string`               | **Required**. Year segment of the date of birth.                |
 #### Constraints:  
 - Gender
   - "Male" or "Female" or "Non-binary"  ✔️
@@ -217,7 +237,9 @@ GET /household/all
 ```http
 GET /household/find/:id
 ```
-Substitute `:id` with a household record's id retrieved from the database.
+| Parameter | Type                   | Description                           |
+|:----------|:-----------------------|:--------------------------------------|
+| `:id`     | `string` or `ObjectId` | **Required**. Household object `_id`. |
 #### Responses:
 ```javascript
 // Valid Request Reponse
@@ -241,7 +263,9 @@ Substitute `:id` with a household record's id retrieved from the database.
 ```http
 GET /household/find-qualifying/:option
 ```
-Substitute `:option` with one of the grant options in the table below.
+| Parameter | Type     | Description                                                                               |
+|:----------|:---------|:------------------------------------------------------------------------------------------|
+| `:option` | `string` | **Required**. Specify a grant option to list the qualifying household and family members. |
 
 | Option | Grant                       |
 |:-------|:----------------------------|
