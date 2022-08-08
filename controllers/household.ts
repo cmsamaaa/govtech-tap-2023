@@ -91,6 +91,8 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
         errMsg += "gender, ";
     if (!isValidMaritalStatus(req.body.maritalStatus))
         errMsg += "marital status, ";
+    if (req.body.maritalStatus === "Married" && req.body.maritalStatus && !req.body.spouse)
+        errMsg += "spouse, ";
     if (!isValidOccupationType(req.body.occupationType))
         errMsg += "occupation type, ";
     if (!isValidDecimal(req.body.annualIncome))
@@ -127,6 +129,25 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
 
     if (householdJSON) {
         const familyMembers = householdJSON.get('familyMembers');
+
+        if (new ObjectId(req.body.spouse) == req.body.spouse) {
+            let isFound = false;
+            for (let i = 0; i < familyMembers.length; i++) {
+                if (familyMembers[i]._id == familyMemberObj.spouse && familyMembers[i].spouse === familyMemberObj.name) {
+                    isFound = true;
+                    break;
+                }
+            }
+
+            if (!isFound) {
+                res.status(StatusCode.BAD_REQUEST).json({
+                    statusCode: StatusCode.BAD_REQUEST,
+                    message: 'An error has occurred. This is due to an invalid spouse id or a different spouse name being provided from the original record.'
+                });
+                return;
+            }
+        }
+
         familyMembers.push(new FamilyMember(familyMemberObj));
 
         const household = new Household({
