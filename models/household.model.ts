@@ -16,7 +16,7 @@ export function isValidHouseholdType(householdType: String): householdType is Ho
 }
 
 export function isValidUnit(unit: String): boolean {
-    const regex = new RegExp('^[0-9]{2}-[0-9]{2}$');
+    const regex = new RegExp('^[0-9]{2}-[0-9]{2,4}$');
     return regex.test(unit.toString());
 }
 

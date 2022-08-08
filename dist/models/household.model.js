@@ -6,7 +6,7 @@ function isValidHouseholdType(householdType) {
 }
 exports.isValidHouseholdType = isValidHouseholdType;
 function isValidUnit(unit) {
-    const regex = new RegExp('^[0-9]{2}-[0-9]{2}$');
+    const regex = new RegExp('^[0-9]{2}-[0-9]{2,4}$');
     return regex.test(unit.toString());
 }
 exports.isValidUnit = isValidUnit;
