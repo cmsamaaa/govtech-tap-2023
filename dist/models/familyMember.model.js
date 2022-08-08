@@ -6,7 +6,7 @@ function isValidGender(gender) {
 }
 exports.isValidGender = isValidGender;
 function isValidMaritalStatus(maritalStatus) {
-    return ['Single', 'Married', 'Divorced'].includes(maritalStatus.toString());
+    return ['Single', 'Married', 'Divorced', 'Widowed'].includes(maritalStatus.toString());
 }
 exports.isValidMaritalStatus = isValidMaritalStatus;
 function isValidOccupationType(occupationType) {
