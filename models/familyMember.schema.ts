@@ -31,6 +31,7 @@ const familyMemberSchema: Schema<IFamilyMember> = new Schema<IFamilyMember>({
         }
     },
     {
+        autoCreate: false,
         timestamps: false,
         versionKey: false
     });

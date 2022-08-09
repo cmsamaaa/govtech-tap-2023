@@ -30,6 +30,7 @@ const familyMemberSchema = new mongoose_1.Schema({
         required: true
     }
 }, {
+    autoCreate: false,
     timestamps: false,
     versionKey: false
 });
