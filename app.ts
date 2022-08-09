@@ -3,13 +3,18 @@ import { insertSeed } from "./libs/mongodb.seed";
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require('path');
 const cors = require('cors');
 
 const errorController = require('./controllers/error');
 
 const householdRoutes = require('./routes/household');
 
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'test')
+    require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+else
+    require('dotenv').config({ path: path.resolve(__dirname, '../.env.test') });
+
 const MONGODB_URI = process.env.MONGODB_URI;
 
 const app = express();
@@ -34,9 +39,12 @@ app.use(errorController.get404);
 mongoose.connect(MONGODB_URI)
     .then((result: any) => {
         /* Calling the database seeding function. */
-        insertSeed();
-        app.listen(process.env.PORT);
+        insertSeed().then((result: any) => {
+            app.listen(process.env.PORT);
+        });
     })
     .catch((err: any) => {
         console.log(err);
     });
+
+module.exports = app;
