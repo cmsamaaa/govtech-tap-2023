@@ -226,6 +226,7 @@ PUT /household/add-member/:id
 - Spouse (optional) 
   - Must include spouse name or id if "Married"
   - Spouse id must exist within household's family members
+  - When a spouse id is provided, a validation is done to ensure that the target family member's spouse shares the same name as the current family member that is being added.
   - Error will be thrown if spouse id cannot be found within the same household's family members ❌
 - Occupation Type
   - "Unemployed" or "Student" or "Employed"  ✔️
