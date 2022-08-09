@@ -1,4 +1,3 @@
-import { Request, Response, NextFunction } from "express";
 import { insertSeed } from "./libs/mongodb.seed";
 
 const express = require('express');
