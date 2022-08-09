@@ -169,8 +169,8 @@ POST /household/create
 
 {
     "statusCode" : Number,
+    "_id"        : ObjectId,
     "message"    : String
-    "_id"        : ObjectId
 }
 ```
 ```javascript
@@ -178,6 +178,7 @@ POST /household/create
 
 {
     "statusCode" : Number,
+    "_id"        : null,
     "message"    : String
 }
 ```
@@ -242,7 +243,8 @@ PUT /household/add-member/:id
 // Valid Request Reponse
 
 {
-    "statusCode" : Number
+    "statusCode" : Number,
+    "message"    : String
 }
 ```
 ```javascript
@@ -273,6 +275,7 @@ GET /household/all
 
 {
     "statusCode" : Number,
+    "result"     : null,
     "message"    : String
 }
 ```
@@ -299,6 +302,7 @@ GET /household/find/:id
 
 {
     "statusCode" : Number,
+    "result"     : null,
     "message"    : String
 }
 ```
@@ -333,6 +337,7 @@ GET /household/find-qualifying/:option
 
 {
     "statusCode" : Number,
+    "result"     : null,
     "message"    : String
 }
 ```
