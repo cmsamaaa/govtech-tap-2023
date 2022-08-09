@@ -2,20 +2,14 @@
 
 #### METEOR TAP Assessment 2023
 For this technical assessment, I chose to attempt the backend (RESTful API) project. This project is written in NodeJs 
-with TypeScript, using Express.js framework with MongoDB database.
+with TypeScript, using Express.js framework with MongoDB database. 
 
-When I received the email notifying me of this assessment, I spontaneously decided on NodeJs as it is very a rather 
-popular JavaScript runtime environment being widely used today. However, I wanted to challenge myself, as I have had 
-prior experiences writing in JavaScript. This is when I decided to write this program in an unfamiliar language 
-(as an opportunity for me to learn). 
-
-TypeScript, which is often deemed as the more "reliable" JavaScript, while still being able to work with NodeJs, the 
-Express.js framework, and it works well with a popular non-relational database, MongoDB. TypeScript allows for easier 
-code refactoring, better readability due to specifying strict types and its support of OOP paradigm, along with the 
-aforementioned reasons, I have hence chose TypeScript.
-
-## Table of contents
-- [Getting Started](#getting-started)
+## Table of Contents
+- [Local Setup Guide](#local-setup-guide)
+  1. [NodeJs](#1-nodejs)
+  3. [MongoDB](#2-mongodb)
+  4. [Process Environment Variables](#3-process-environment-variables-env)
+- [npm Commands](#npm-commands)
 - [Dependencies](#dependencies)
 - [API Documentation](#api-documentation)
    1. [Create household](#1-create-household)
@@ -33,32 +27,79 @@ aforementioned reasons, I have hence chose TypeScript.
    5. [List household and family members that qualify for grants](#5-list-household-and-family-members-that-qualify-for-grants)
       - [Responses](#constraints)
 - [Status Codes](#status-codes)
+- [Explanations](#Explanations)
+  - [Interpretations & Assumptions](#interpretations--assumptions)
+    - [Household](#household)
+    - [Family Members](#family-members)
+  - [Architecture Decisions](#architecture-decisions)
 
-## Getting Started
-In the project directory, you may run the following commands in the terminal:
+## Local Setup Guide
+Needless to say, please pull the project first before proceeding.
+### 1. NodeJs
+To run this project locally, you must have NodeJs installed on your device. A quick way to get started is to directly
+install NodeJs on your system. You may download the installer [here](https://nodejs.org/en/download/).
+
+However, it is strongly recommended to use a Node version manager such as [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) 
+to install NodeJs and npm. You may read more about it [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
+### 2. MongoDB
+To run the project locally, you must ensure that you have MongoDB database available. You may host a MongoDB database
+[locally](https://www.mongodb.com/docs/manual/installation/) or on the cloud through 
+[MongoDB Atlas](https://www.mongodb.com/docs/atlas/getting-started/). I highly recommend you to use MongoDB Atlas as it 
+is a cloud-hosted MongoDB service which requires no installation overhead and offers a free tier option without the need
+for any of your billing information! 
+
+To set up a MongoDB Atlas cluster, please follow the official documentations: 
+1. [Create an Atlas Account](https://www.mongodb.com/docs/atlas/tutorial/create-atlas-account/)
+2. [Deploy a Free Cluster](https://www.mongodb.com/docs/atlas/tutorial/deploy-free-tier-cluster/)
+3. [Add Your Connection IP Address](https://www.mongodb.com/docs/atlas/security/add-ip-address-to-list/)
+4. [Create a User for Your Cluster](https://www.mongodb.com/docs/atlas/tutorial/create-mongodb-user-for-cluster/)
+5. [Connect to Your Cluster](https://www.mongodb.com/docs/atlas/tutorial/connect-to-your-cluster/)
+
+To set up a MongoDB cluster locally, please follow the official documentation [here](https://www.mongodb.com/docs/v6.0/tutorial/install-mongodb-on-windows/).
+
+Once you have successfully setup your cluster, you should be presented with a **URI** that looks similar to the following:
+
+`mongodb+srv://<USER_NAME>:<USER_PASSWORD>@<CLUSTER_NAME>.mongodb.net/<DATABASE_NAME>?retryWrites=true&w=majority`
+
+> **NOTE:** You do not have to import any database collections as seed data will be inserted when the database is empty.
+
+### 3. Process Environment Variables `.env`
+To run the program, you must configure the process environment variables first. 
+
+You may do so by creating an empty file in the root directory and name it `.env`. The file should contain the following:
+```
+MONGODB_URI="mongodb+srv://<USER_NAME>:<USER_PASSWORD>@<CLUSTER_NAME>.mongodb.net/<DATABASE_NAME>?retryWrites=true&w=majority"
+PORT=3000
+```
+**NOTE:** `PORT` can be configured to your preference, but the default port for NodeJs server is normally configured to 3000. You may specify any name of your choice for `<DATABASE_NAME>`.
+
+## npm Commands
+Now that your local files are set up and ready, we can start the server and run the server locally! 
+Here, we have a list of CLI commands that may be useful to you. In the project directory, simply open a terminal to run 
+the following:
 
 ### `npm ci` 
    - This command will install all necessary dependencies based on the `package-lock.json`.
    - You only need to run this command <b>once</b> in the project directory.
 ### `npm run build`
-   - This command compiles TypeScript into JavaScript.
+   - This command compiles all the TypeScript files into JavaScript.
    - The compiled JavaScript files will be located in `./dist`.
    - Alternatively, you may run `npx tsc`.
-   - You need to run this command everytime you made a change to the TypeScript files.
+   - You are required to run this command everytime you made a change to the TypeScript files.
    - Find out more from [TypeScript](https://www.typescriptlang.org/docs/handbook/intro.html).
 ### `npm start`
    - This command starts the node server located in `./dist`.
-   - Highly recommended to always run `npm run build` before `npm start` unless you're certain.
+   - Highly recommended to always run `npm run build` before `npm start` unless you are certain that it is the latest.
    - Alternatively, you may run `node dist/app.js`.
 ### `npm run dev`
-   - This command starts the node server in development environment.
-   - It will watch for any changes to the TypeScript files, compiles, and restart the server.
+   - This command starts the node server in development mode.
+   - It will monitor for any changes to the TypeScript files and compiles whenever necessary, before restarting the node server.
    - Alternatively, you may run `concurrently "npx tsc --watch" "nodemon -q dist/app.js"`
    - For more info, please refer to [concurrently](https://github.com/open-cli-tools/concurrently#usage) and [Nodemon](https://github.com/remy/nodemon#nodemon).
 
 ## Dependencies
 
-#### Node v16.x
+#### Running on Node v16.13.1
     "dependencies": {
         "body-parser": "^1.20.0",
         "dotenv": "^16.0.1",
@@ -300,3 +341,27 @@ GET /household/find-qualifying/:option
 | 201         | `CREATED`     |
 | 400         | `BAD REQUEST` |
 | 404         | `NOT FOUND`   |
+
+## Explanations
+### Interpretations & Assumptions
+All database records have a `createdAt` and `updatedAt` field, which I think is necessary to keep track of when updates 
+are made, especially for sensitive data such as citizen's addresses and personal information.
+#### Household
+- Asides from `housingType`, I have deemed that `address`, `unit` and `postal` are necessary to describe a household uniquely.
+- `housingType` is constrained to only three values 'HDB', 'Condominium', or 'Landed', to ensure that users cannot submit invalid values, hence allowing accurate filtering.
+#### Family Members
+- `occupationType` is constrained to only the three options as stated in the assessment's instructions: 'Unemployed', 'Student', 'Employed'.
+- `gender` is constrained to only standard options of 'Male', 'Female', and 'Non-binary'.
+- `maritalStatus` is constrained to standard options of 'Single', 'Married', 'Divorced', 'Widowed'.
+- Same as the reason before, these constraints are put in place to ensure that users do not enter invalid values, thus allowing us to accurately filter the information by these fields when necessary.
+### Architecture Decisions
+When I received the email notifying me of this assessment, I spontaneously decided on NodeJs as it is very a rather 
+popular JavaScript runtime environment being widely used today. However, I wanted to challenge myself, as I have had 
+prior experiences writing in JavaScript. This is when I decided to write this program in an unfamiliar language 
+(as an opportunity for me to learn). 
+
+TypeScript, which is often deemed as the more "reliable" JavaScript, while still being able to work with NodeJs, the 
+Express.js framework, and it works well with a popular non-relational database, MongoDB. TypeScript allows for easier 
+code refactoring, better readability due to specifying strict types and its support of OOP paradigm.
+
+Thus, with these aforementioned reason, I chose to write the API in TypeScript.
