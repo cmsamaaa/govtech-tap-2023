@@ -27,8 +27,9 @@ with TypeScript, using Express.js framework with MongoDB database.
    5. [List household and family members that qualify for grants](#5-list-household-and-family-members-that-qualify-for-grants)
       - [Responses](#constraints)
 - [Status Codes](#status-codes)
-- [Explanations](#Explanations)
-  - [Interpretations & Assumptions](#interpretations--assumptions)
+- [Explanations](#explanations)
+  - [Cross-Origin Resource Sharing (CORS)](#cross-origin-resource-sharing-cors) 
+  - [Database](#database)
     - [Household](#household)
     - [Family Members](#family-members)
   - [Architecture Decisions](#architecture-decisions)
@@ -59,7 +60,9 @@ To set up a MongoDB cluster locally, please follow the official documentation [h
 
 Once you have successfully setup your cluster, you should be presented with a **URI** that looks similar to the following:
 
-`mongodb+srv://<USER_NAME>:<USER_PASSWORD>@<CLUSTER_NAME>.mongodb.net/<DATABASE_NAME>?retryWrites=true&w=majority`
+```
+mongodb+srv://<USER_NAME>:<USER_PASSWORD>@<CLUSTER_NAME>.mongodb.net/<DATABASE_NAME>?retryWrites=true&w=majority
+```
 
 > **NOTE:** You do not have to import any database collections as seed data will be inserted when the database is empty.
 
@@ -71,7 +74,7 @@ You may do so by creating an empty file in the root directory and name it `.env`
 MONGODB_URI="mongodb+srv://<USER_NAME>:<USER_PASSWORD>@<CLUSTER_NAME>.mongodb.net/<DATABASE_NAME>?retryWrites=true&w=majority"
 PORT=3000
 ```
-**NOTE:** `PORT` can be configured to your preference, but the default port for NodeJs server is normally configured to 3000. You may specify any name of your choice for `<DATABASE_NAME>`.
+> **NOTE:** `PORT` can be configured to your preference, but the default port for NodeJs server is normally configured to 3000. You may specify any name of your choice for `<DATABASE_NAME>`.
 
 ## npm Commands
 Now that your local files are set up and ready, we can start the server and run the server locally! 
@@ -102,6 +105,7 @@ the following:
 #### Running on Node v16.13.1
     "dependencies": {
         "body-parser": "^1.20.0",
+        "cors": "^2.8.5",
         "dotenv": "^16.0.1",
         "express": "^4.18.1",
         "mongoose": "^6.5.1"
@@ -128,7 +132,7 @@ When a request is sent to a non-existing endpoint, the following JSON response w
 ```
 
 ### 1. Create household
-```http
+```http request
 POST /household/create
 ```
 #### Request Body:
@@ -180,7 +184,7 @@ POST /household/create
 <br/>
 
 ### 2. Add a family member to household
-```http
+```http request
 PUT /household/add-member/:id
 ```
 | Parameter | Type                   | Description                           |
@@ -252,7 +256,7 @@ PUT /household/add-member/:id
 <br/>
 
 ### 3. List all households
-```http
+```http request
 GET /household/all
 ```
 #### Responses:
@@ -275,7 +279,7 @@ GET /household/all
 <br/>
 
 ### 4. Search for a specific household
-```http
+```http request
 GET /household/find/:id
 ```
 | Parameter | Type                   | Description                           |
@@ -301,7 +305,7 @@ GET /household/find/:id
 <br/>
 
 ### 5. List household and family members that qualify for grants
-```http
+```http request
 GET /household/find-qualifying/:option
 ```
 | Parameter | Type     | Description                                                                               |
@@ -343,7 +347,16 @@ GET /household/find-qualifying/:option
 | 404         | `NOT FOUND`   |
 
 ## Explanations
-### Interpretations & Assumptions
+### Cross-Origin Resource Sharing (CORS)
+Cross-origin resource sharing (CORS) is a mechanism that allows restricted resources on a web page to be requested from 
+another domain outside the domain from which the first resource was served. 
+
+To ensure that users from different domains 
+can call and access the API endpoint, I have allowed CORS for the following HTTP request methods: 
+```
+GET, POST, PUT, DELETE, OPTIONS
+```
+### Database
 All database records have a `createdAt` and `updatedAt` field, which I think is necessary to keep track of when updates 
 are made, especially for sensitive data such as citizen's addresses and personal information.
 #### Household
