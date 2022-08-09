@@ -12,6 +12,7 @@ import {
 const ObjectId = require('mongoose').Types.ObjectId;
 
 import {HTTP_STATUS} from "../constants/http_status";
+
 const Household = require('../models/household.schema');
 const FamilyMember = require('../models/familyMember.schema');
 
@@ -23,6 +24,15 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             statusCode: HTTP_STATUS.BAD_REQUEST,
             message: 'Request body empty. Ensure request is submitted in JSON format.'
+        });
+        return;
+    }
+
+    if (!req.body.householdType || !req.body.address || !req.body.unit || !req.body.postal) {
+        res.status(HTTP_STATUS.BAD_REQUEST).json({
+            statusCode: HTTP_STATUS.BAD_REQUEST,
+            _id: null,
+            message: 'Invalid body.'
         });
         return;
     }
@@ -86,6 +96,16 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             statusCode: HTTP_STATUS.BAD_REQUEST,
             message: 'Request body empty. Ensure request is submitted in JSON format.'
+        });
+        return;
+    }
+
+    if (!req.body.name || !req.body.gender || !req.body.maritalStatus || !req.body.occupationType ||
+        (!req.body.annualIncome && req.body.annualIncome !== 0) || !req.body.DOB_day || !req.body.DOB_month || !req.body.DOB_year) {
+        res.status(HTTP_STATUS.BAD_REQUEST).json({
+            statusCode: HTTP_STATUS.BAD_REQUEST,
+            _id: null,
+            message: 'Invalid body.'
         });
         return;
     }

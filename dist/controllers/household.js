@@ -26,6 +26,14 @@ exports.createHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         });
         return;
     }
+    if (!req.body.householdType || !req.body.address || !req.body.unit || !req.body.postal) {
+        res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
+            statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
+            _id: null,
+            message: 'Invalid body.'
+        });
+        return;
+    }
     let errMsg = "Invalid field(s): ";
     if (!(0, household_model_1.isValidHouseholdType)(req.body.householdType))
         errMsg += "housing type, ";
@@ -82,6 +90,15 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
             statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
             message: 'Request body empty. Ensure request is submitted in JSON format.'
+        });
+        return;
+    }
+    if (!req.body.name || !req.body.gender || !req.body.maritalStatus || !req.body.occupationType ||
+        (!req.body.annualIncome && req.body.annualIncome !== 0) || !req.body.DOB_day || !req.body.DOB_month || !req.body.DOB_year) {
+        res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
+            statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
+            _id: null,
+            message: 'Invalid body.'
         });
         return;
     }
