@@ -185,7 +185,7 @@ exports.household_list = [
                 name: "Baby Chua",
                 gender: "Female",
                 maritalStatus: "Single",
-                occupationType: "Student",
+                occupationType: "Unemployed",
                 annualIncome: 0,
                 DOB: new Date("2022-07-21")
             }
