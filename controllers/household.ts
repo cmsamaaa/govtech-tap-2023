@@ -65,12 +65,13 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
         const result = await household.save();
         res.status(HTTP_STATUS.CREATED).json({
             statusCode: HTTP_STATUS.CREATED,
-            message: 'Household added successfully',
-            _id: result._id
+            _id: result._id,
+            message: 'Household added successfully.'
         });
     } catch (e) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             statusCode: HTTP_STATUS.BAD_REQUEST,
+            _id: null,
             message: 'Fail to create household record, please check your request again.'
         });
     }
@@ -168,12 +169,13 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
 
             if (result.modifiedCount > 0)
                 res.status(HTTP_STATUS.OK).json({
-                    statusCode: HTTP_STATUS.OK
+                    statusCode: HTTP_STATUS.OK,
+                    message: "Family member was added to household."
                 });
             else
                 res.status(HTTP_STATUS.BAD_REQUEST).json({
                     statusCode: HTTP_STATUS.BAD_REQUEST,
-                    message: "Family member is not recorded."
+                    message: "Family member was not added to household."
                 });
         } catch (e) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({
@@ -184,7 +186,7 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
     } else {
         res.status(HTTP_STATUS.NOT_FOUND).json({
             statusCode: HTTP_STATUS.NOT_FOUND,
-            message: 'Household record cannot be found!'
+            message: 'Household record cannot be found.'
         });
     }
 };
@@ -201,6 +203,7 @@ exports.getAllHouseholds = async (req: Request, res: Response, next: NextFunctio
     } catch (e) {
         res.status(HTTP_STATUS.NOT_FOUND).json({
             statusCode: HTTP_STATUS.NOT_FOUND,
+            result: null,
             message: 'An error has occurred, please check your request again.'
         });
     }
@@ -219,11 +222,13 @@ exports.findHousehold = async (req: Request, res: Response, next: NextFunction) 
         else
             res.status(HTTP_STATUS.NOT_FOUND).json({
                 statusCode: HTTP_STATUS.NOT_FOUND,
-                message: 'Household not found!'
+                result: null,
+                message: 'Household not found.'
             });
     } catch (e) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             statusCode: HTTP_STATUS.BAD_REQUEST,
+            result: null,
             message: 'An error has occurred, please check your request again.'
         });
     }
@@ -252,6 +257,7 @@ exports.findQualifyingHouseholds = async (req: Request, res: Response, next: Nex
             default:
                 res.status(HTTP_STATUS.NOT_FOUND).json({
                     statusCode: HTTP_STATUS.NOT_FOUND,
+                    result: null,
                     message: 'Invalid argument.'
                 });
                 break;
@@ -264,6 +270,7 @@ exports.findQualifyingHouseholds = async (req: Request, res: Response, next: Nex
     } catch (e) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             statusCode: HTTP_STATUS.BAD_REQUEST,
+            result: null,
             message: 'An error has occurred, please check your request again.'
         });
     }
