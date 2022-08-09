@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from "express";
+import {Request, Response, NextFunction} from "express";
+import {insertSeed} from "./libs/mongodb.seed";
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -15,7 +16,7 @@ const app = express();
 
 /* Parsing the body of the request. */
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
     res.send('Hello World!');
@@ -29,6 +30,7 @@ app.use(errorController.get404);
 /* Connecting to the database and listening to port 3000. */
 mongoose.connect(MONGODB_URI)
     .then((result: any) => {
+        insertSeed();
         app.listen(process.env.PORT);
     })
     .catch((err: any) => {

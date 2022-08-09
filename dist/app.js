@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const mongodb_seed_1 = require("./libs/mongodb.seed");
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -20,6 +21,7 @@ app.use(errorController.get404);
 /* Connecting to the database and listening to port 3000. */
 mongoose.connect(MONGODB_URI)
     .then((result) => {
+    (0, mongodb_seed_1.insertSeed)();
     app.listen(process.env.PORT);
 })
     .catch((err) => {
