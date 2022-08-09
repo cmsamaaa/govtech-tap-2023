@@ -5,7 +5,7 @@ For this technical assessment, I chose to attempt the backend (RESTful API) proj
 with TypeScript, using Express.js framework with MongoDB database. 
 
 ## Table of Contents
-- [Local Setup Guide](#local-setup-guide)
+- [Setup Guide (Local)](#setup-guide-local)
   1. [NodeJs](#1-nodejs)
   3. [MongoDB](#2-mongodb)
   4. [Process Environment Variables](#3-process-environment-variables-env)
@@ -27,6 +27,8 @@ with TypeScript, using Express.js framework with MongoDB database.
    5. [List household and family members that qualify for grants](#5-list-household-and-family-members-that-qualify-for-grants)
       - [Responses](#constraints)
 - [Status Codes](#status-codes)
+- [Unit Test](#unit-test)
+- [CI/CD Pipeline](#cicd)
 - [Explanations](#explanations)
   - [Cross-Origin Resource Sharing (CORS)](#cross-origin-resource-sharing-cors) 
   - [Database](#database)
@@ -34,7 +36,7 @@ with TypeScript, using Express.js framework with MongoDB database.
     - [Family Members](#family-members)
   - [Architecture Decisions](#architecture-decisions)
 
-## Local Setup Guide
+## Setup Guide (Local)
 Needless to say, please pull the project first before proceeding.
 ### 1. NodeJs
 To run this project locally, you must have NodeJs installed on your device. A quick way to get started is to directly
@@ -112,10 +114,16 @@ the following:
     },
     "devDependencies": {
         "@types/body-parser": "^1.19.2",
+        "@types/chai": "^4.3.3",
+        "@types/chai-http": "^4.2.0",
         "@types/express": "^4.17.13",
+        "@types/mocha": "^9.1.1",
         "@types/mongoose": "^5.11.97",
         "@types/node": "^18.6.4",
+        "chai": "^4.3.6",
+        "chai-http": "^4.3.0",
         "concurrently": "^7.3.0",
+        "mocha": "^10.0.0",
         "nodemon": "^2.0.19",
         "typescript": "^4.7.4"
     }
@@ -351,6 +359,12 @@ GET /household/find-qualifying/:option
 | 201         | `CREATED`     |
 | 400         | `BAD REQUEST` |
 | 404         | `NOT FOUND`   |
+
+## Unit Test
+Work in progress...
+
+## CI/CD
+Work in progress...
 
 ## Explanations
 ### Cross-Origin Resource Sharing (CORS)
