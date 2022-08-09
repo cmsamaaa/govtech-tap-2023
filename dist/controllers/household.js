@@ -38,6 +38,7 @@ exports.createHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     if (errMsg !== "Invalid field(s): ") {
         res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
             statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
+            _id: null,
             message: `${errMsg.slice(0, errMsg.length - 2)}.`
         });
         return;
@@ -100,6 +101,7 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     if (errMsg !== "Invalid field(s): ") {
         res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
             statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
+            _id: null,
             message: `${errMsg.slice(0, errMsg.length - 2)}.`
         });
         return;
@@ -122,6 +124,7 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
             statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
             message: 'An error has occurred when retrieving household record, please check your request again.'
         });
+        return;
     }
     if (householdJSON) {
         const familyMembers = householdJSON.get('familyMembers');
@@ -159,17 +162,19 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
                     statusCode: http_status_1.HTTP_STATUS.OK,
                     message: "Family member was added to household."
                 });
-            else
+            else {
                 res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
                     statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
                     message: "Family member was not added to household."
                 });
+            }
         }
         catch (e) {
             res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
                 statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
                 message: 'An error has occurred when updating record, please check your request again.'
             });
+            return;
         }
     }
     else {
@@ -244,9 +249,9 @@ exports.findQualifyingHouseholds = (req, res, next) => __awaiter(void 0, void 0,
                 res.status(http_status_1.HTTP_STATUS.NOT_FOUND).json({
                     statusCode: http_status_1.HTTP_STATUS.NOT_FOUND,
                     result: null,
-                    message: 'Invalid argument.'
+                    message: 'Invalid option or argument.'
                 });
-                break;
+                return;
         }
         res.status(http_status_1.HTTP_STATUS.OK).json({
             statusCode: http_status_1.HTTP_STATUS.OK,

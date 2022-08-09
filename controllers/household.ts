@@ -39,6 +39,7 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
     if (errMsg !== "Invalid field(s): ") {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             statusCode: HTTP_STATUS.BAD_REQUEST,
+            _id: null,
             message: `${errMsg.slice(0, errMsg.length - 2)}.`
         });
         return;
@@ -105,6 +106,7 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
     if (errMsg !== "Invalid field(s): ") {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             statusCode: HTTP_STATUS.BAD_REQUEST,
+            _id: null,
             message: `${errMsg.slice(0, errMsg.length - 2)}.`
         });
         return;
@@ -128,6 +130,7 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
             statusCode: HTTP_STATUS.BAD_REQUEST,
             message: 'An error has occurred when retrieving household record, please check your request again.'
         });
+        return;
     }
 
     if (householdJSON) {
@@ -172,16 +175,19 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
                     statusCode: HTTP_STATUS.OK,
                     message: "Family member was added to household."
                 });
-            else
+            else {
                 res.status(HTTP_STATUS.BAD_REQUEST).json({
                     statusCode: HTTP_STATUS.BAD_REQUEST,
                     message: "Family member was not added to household."
                 });
+            }
+
         } catch (e) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({
                 statusCode: HTTP_STATUS.BAD_REQUEST,
                 message: 'An error has occurred when updating record, please check your request again.'
             });
+            return;
         }
     } else {
         res.status(HTTP_STATUS.NOT_FOUND).json({
@@ -258,9 +264,9 @@ exports.findQualifyingHouseholds = async (req: Request, res: Response, next: Nex
                 res.status(HTTP_STATUS.NOT_FOUND).json({
                     statusCode: HTTP_STATUS.NOT_FOUND,
                     result: null,
-                    message: 'Invalid argument.'
+                    message: 'Invalid option or argument.'
                 });
-                break;
+                return;
         }
 
         res.status(HTTP_STATUS.OK).json({
