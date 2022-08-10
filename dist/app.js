@@ -29,10 +29,13 @@ app.use(errorController.get404);
 /* Connecting to the database and listening to port 3000. */
 mongoose.connect(MONGODB_URI)
     .then((result) => {
-    /* Calling the database seeding function. */
-    (0, mongodb_seed_1.insertSeed)().then((result) => {
+    if (process.env.NODE_ENV !== 'test')
+        /* Calling the database seeding function. */
+        (0, mongodb_seed_1.insertSeed)().then((result) => {
+            app.listen(process.env.PORT);
+        });
+    else
         app.listen(process.env.PORT);
-    });
 })
     .catch((err) => {
     console.log(err);

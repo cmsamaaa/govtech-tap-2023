@@ -1,4 +1,4 @@
-import { insertSeed } from "./libs/mongodb.seed";
+import {insertSeed} from "./libs/mongodb.seed";
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -11,9 +11,9 @@ const errorController = require('./controllers/error');
 const householdRoutes = require('./routes/household');
 
 if (process.env.NODE_ENV !== 'test')
-    require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+    require('dotenv').config({path: path.resolve(__dirname, '../.env')});
 else
-    require('dotenv').config({ path: path.resolve(__dirname, '../.env.test') });
+    require('dotenv').config({path: path.resolve(__dirname, '../.env.test')});
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -21,7 +21,7 @@ const app = express();
 
 /* Parsing the body of the request. */
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 /* Allowing the server to accept requests from the client. */
 const corsOptions = {
@@ -38,10 +38,13 @@ app.use(errorController.get404);
 /* Connecting to the database and listening to port 3000. */
 mongoose.connect(MONGODB_URI)
     .then((result: any) => {
-        /* Calling the database seeding function. */
-        insertSeed().then((result: any) => {
+        if (process.env.NODE_ENV !== 'test')
+            /* Calling the database seeding function. */
+            insertSeed().then((result: any) => {
+                app.listen(process.env.PORT);
+            });
+        else
             app.listen(process.env.PORT);
-        });
     })
     .catch((err: any) => {
         console.log(err);
