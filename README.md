@@ -37,7 +37,7 @@ with TypeScript, using Express.js framework with MongoDB database.
   - [Architecture Decisions](#architecture-decisions)
 
 ## Setup Guide (Local)
-Needless to say, please pull the project first before proceeding.
+Needless to say, please clone the project first before proceeding.
 ### 1. Node.js
 To run this project locally, you must have Node.js installed on your device. A quick way to get started is to directly
 install Node.js on your system. You may download the installer [here](https://nodejs.org/en/download/).
@@ -76,7 +76,12 @@ You may do so by creating an empty file in the root directory and name it `.env`
 MONGODB_URI="mongodb+srv://<USER_NAME>:<USER_PASSWORD>@<CLUSTER_NAME>.mongodb.net/<DATABASE_NAME>?retryWrites=true&w=majority"
 PORT=3000
 ```
-> **NOTE:** `PORT` can be configured to your preference, but the default port for Node.js server is normally configured to 3000. You may specify any name of your choice for `<DATABASE_NAME>`.
+> **NOTE:** You may specify any name of your choice for `<DATABASE_NAME>`.
+
+| Parameters    | Type     | Description                                                                              |
+|:--------------|:---------|:-----------------------------------------------------------------------------------------|
+| `MONGODB_URI` | `String` | **Required**. URI that points to your MongoDB cluster and database.                      |
+| `PORT`        | `Number` | **Optional**. Specify the port that your app will run on. On default, it is set to 3000. |
 
 ## npm Commands
 Now that your local files are set up and ready, we can start the server and run the server locally! 
@@ -98,9 +103,14 @@ the following:
    - Alternatively, you may run `node dist/app.js`.
 ### `npm run dev`
    - This command starts the node server in development mode.
-   - It will monitor for any changes to the TypeScript files and compiles whenever necessary, before restarting the node server.
+   - It will monitor for any changes to the TypeScript files and compiles whenever necessary, afterwards it will restart the node server.
    - Alternatively, you may run `concurrently "npx tsc --watch" "nodemon -q dist/app.js"`
-   - For more info, please refer to [concurrently](https://github.com/open-cli-tools/concurrently#usage) and [Nodemon](https://github.com/remy/nodemon#nodemon).
+   - For more info, please refer to [concurrently](https://github.com/open-cli-tools/concurrently#usage) and [Nodemon](https://github.com/remy/nodemon#nodemon)
+### `npm run test`
+   - This command runs the unit tests and generates a code coverage report.
+   - Code coverage report are generated in `./coverage`, in HTML format for ease of readability.
+   - Alternatively, you may run `nyc --reporter=html --reporter=text mocha dist/test/household.js --timeout 5000 --exit"`
+   - For more info, you may read up on them in their official documentations: [Istanbul / nyc](https://istanbul.js.org/), [Mocha.js](https://mochajs.org/), [Chai.js](https://www.chaijs.com/).
 
 ## Dependencies
 
@@ -135,7 +145,7 @@ summarised list taken from [package.json](./package.json):
 ## API Documentation
 This API supports JSON format. Please ensure that `Content-Type: application/json` is set in the request header.
 
-When a request is sent to a non-existing endpoint, the following JSON response will be thrown:
+When a request is sent to a non-existing endpoint (a.k.a. ERROR 404), the following JSON response will be thrown:
 ```javascript
 {
     "statusCode": 404,
@@ -390,7 +400,9 @@ the YAML file.
 
 Upon pushing into the "main" branch, the CI workflow will be automatically triggered, beginning with checking out the 
 repository so that the workflow can access it. The CI attempt to install all necessary dependencies, compile the 
-Typescript into JavaScript (build), and run the unit testings (test).
+TypeScript into JavaScript (build), and run the unit testings (test). When the build and tests are completed, it will 
+export both the compiled app and code coverage report as artifacts produced by the workflow, which can be downloaded 
+from the "Summary" of each completed workflow process.
 
 When the CI workflow passes, the codes will be deployed to Heroku automatically.
 
@@ -421,10 +433,16 @@ are made, especially for sensitive data such as citizen's addresses and personal
 When I received the email notifying me of this assessment, I spontaneously decided on Node.js as it is very a rather 
 popular JavaScript runtime environment being widely used today. However, I wanted to challenge myself, as I have had 
 prior experiences writing in JavaScript. This is when I decided to write this program in an unfamiliar language 
-(as an opportunity for me to learn). 
+(as an opportunity for me to learn).
 
-TypeScript, which is often deemed as the more "reliable" JavaScript, while still being able to work with Node.js, the 
-Express.js framework, and it works well with a popular non-relational database, MongoDB. TypeScript allows for easier 
-code refactoring, better readability due to specifying strict types and its support of OOP paradigm.
+TypeScript is generally preferred over JavaScript due to its support for static/strong typing, allowing errors to be
+spotted during compile time, which is a feature that JavaScript does not offer. Prior to compiling, during the 
+development phase, TypeScript often point out compilation errors as we work on the code. Due to this, we will be less 
+likely to encounter runtime errors, unlike JavaScript which is an interpreted language.
+
+TypeScript also allows for easier code refactoring, better readability due to specifying strict types, and its support 
+of OOP paradigm, makes TypeScript a very good consideration over JavaScript.
+
+On the other hand, the most notable disadvantage about TypeScript over JavaScript would be its compilation time. 
 
 Thus, with these aforementioned reason, I chose to write the API in TypeScript.
