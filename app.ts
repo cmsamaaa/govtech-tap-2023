@@ -20,26 +20,26 @@ const APP_PORT = process.env.PORT ? process.env.PORT : 3000;
 
 const app = express();
 
-/* Parsing the body of the request. */
+// Parsing the body of the request.
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-/* Allowing the server to accept requests from the client. */
+// Allowing the server to accept requests from external clients.
 const corsOptions = {
     methods: "GET, POST, PUT, DELETE, OPTIONS"
 }
 app.use(cors(corsOptions));
 
-/* Telling the app to use the householdRoutes file for all requests that start with /household. */
+// Telling the app to use the householdRoutes file for all requests that start with /household.
 app.use('/household', householdRoutes);
 
-/* A error controller that is called when the request is not handled by any other controllers. */
+// A error controller that is called when the request is not handled by any other controllers.
 app.use(errorController.get404);
 
-/* Connecting to the database and listening to port 3000. */
+// Connecting to the database and listening to port 3000.
 mongoose.connect(MONGODB_URI)
     .then((result: any) => {
-        /* Calling the database seeding function. */
+        // Calling the database seeding function.
         insertSeed().then((result: any) => {
             app.listen(APP_PORT);
         });

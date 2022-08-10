@@ -12,6 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.insertSeed = void 0;
 const db_seed_1 = require("../constants/db.seed");
 const Household = require('../models/household.schema');
+/**
+ * If the environment is not test, then find all households,
+ * if there are none, then insert the household_list.
+ */
 function insertSeed() {
     return __awaiter(this, void 0, void 0, function* () {
         if (process.env.NODE_ENV !== 'test') {

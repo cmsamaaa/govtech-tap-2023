@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import {Schema} from "mongoose";
 
 export type Gender = 'Male' | 'Female' | 'Non-binary';
 export type MaritalStatus = 'Single' | 'Married' | 'Divorced' | 'Widowed';

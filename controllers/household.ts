@@ -18,8 +18,7 @@ const FamilyMember = require('../models/familyMember.schema');
 
 // Creates a household record
 exports.createHousehold = async (req: Request, res: Response, next: NextFunction) => {
-    /* This is a check to ensure that the request body is not empty.
-    If it is empty, it will return a 400 error. */
+    // This is a check to ensure that the request body is not empty. If it is empty, it will return a 400 error.
     if (Object.keys(req.body).length === 0) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             statusCode: HTTP_STATUS.BAD_REQUEST,
@@ -29,6 +28,7 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
         return;
     }
 
+    // This is a check to ensure that the request body is not empty. If it is empty, it will return a 400 error.
     if (!req.body.housingType || !req.body.address || !req.body.unit || !req.body.postal) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             statusCode: HTTP_STATUS.BAD_REQUEST,
@@ -38,6 +38,7 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
         return;
     }
 
+    // Checking if the fields are valid.
     let errMsg = "Invalid field(s): ";
     if (!isValidHousingType(req.body.housingType))
         errMsg += "housing type, ";
@@ -54,6 +55,7 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
         return;
     }
 
+    // This is a check to ensure that the unit number is valid for the housing type.
     if (req.body.housingType === "Landed" && req.body.unit !== "01-01") {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             statusCode: HTTP_STATUS.BAD_REQUEST,
@@ -90,8 +92,7 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
 
 // Add a family member to household
 exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction) => {
-    /* This is a check to ensure that the request body is not empty.
-    If it is empty, it will return a 400 error. */
+    // This is a check to ensure that the request body is not empty. If it is empty, it will return a 400 error.
     if (Object.keys(req.body).length === 0) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             statusCode: HTTP_STATUS.BAD_REQUEST,
@@ -100,6 +101,7 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
         return;
     }
 
+    // This is a check to ensure that the request body is not empty. If it is empty, it will return a 400 error.
     if (!req.body.name || !req.body.gender || !req.body.maritalStatus || !req.body.occupationType ||
         (!req.body.annualIncome && req.body.annualIncome !== 0) || !req.body.DOB_day || !req.body.DOB_month || !req.body.DOB_year) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
@@ -110,6 +112,7 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
         return;
     }
 
+    // Checking if the fields are valid.
     let errMsg = "Invalid field(s): ";
     if (!isValidGender(req.body.gender))
         errMsg += "gender, ";
@@ -156,6 +159,7 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
     if (householdJSON) {
         const familyMembers = householdJSON.get('familyMembers');
 
+        // Checking if the spouse id is valid and if it is, it will check if the spouse id is equal to the spouse name.
         if (ObjectId.isValid(req.body.spouse)) {
             if (new ObjectId(req.body.spouse) == req.body.spouse) {
                 let isFound = false;
