@@ -436,6 +436,9 @@ popular JavaScript runtime environment being widely used today. However, I wante
 prior experiences writing in JavaScript. This is when I decided to write this program in an unfamiliar language 
 (as an opportunity for me to learn).
 
+This is when I thought of TypeScript, which could allow me to work with Node.js, Express.js framework, and works 
+seamlessly with the popular non-relational database, MongoDB.
+
 TypeScript is generally preferred over JavaScript due to its support for static/strong typing, allowing errors to be
 spotted during compile time, which is a feature that JavaScript does not offer. Prior to compiling, during the 
 development phase, TypeScript often point out compilation errors as we work on the code. Due to this, we will be less 
