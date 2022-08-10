@@ -71,9 +71,10 @@ mongodb+srv://<USER_NAME>:<USER_PASSWORD>@<CLUSTER_NAME>.mongodb.net/<DATABASE_N
 > **NOTE:** You do not have to import any database collections as seed data will be inserted when the database is empty.
 
 ### 3. Process Environment Variables `.env`
-To run the program, you must configure the process environment variables first. 
+To run the app and unit test, you must configure the process environment variables first. 
 
-You may do so by creating an empty file in the root directory and name it `.env`. The file should contain the following:
+You may do so by creating an empty file in the root directory and name it `.env` and `.env.test`, one for the 
+production, and the other for the unit test. The files should contain the following variables:
 ```
 MONGODB_URI="mongodb+srv://<USER_NAME>:<USER_PASSWORD>@<CLUSTER_NAME>.mongodb.net/<DATABASE_NAME>?retryWrites=true&w=majority"
 PORT=3000
