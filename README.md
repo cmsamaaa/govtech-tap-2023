@@ -150,18 +150,18 @@ POST /household/create
 #### Request Body:
 ```javascript
 {
-    "householdType": String,
+    "housingType": String,
     "address": String,
     "unit": String,
     "postal": String
 }
 ```
-| Parameter       | Type     | Description                                       |
-|:----------------|:---------|:--------------------------------------------------|
-| `householdType` | `string` | **Required**. "HDB" or "Condominium" or "Landed". |
-| `address`       | `string` | **Required**. Block and street name.              |
-| `unit`          | `string` | **Required**. Unit number of the apartment.       |
-| `postal`        | `string` | **Required**. Postal code.                        |
+| Parameter     | Type     | Description                                       |
+|:--------------|:---------|:--------------------------------------------------|
+| `housingType` | `string` | **Required**. "HDB" or "Condominium" or "Landed". |
+| `address`     | `string` | **Required**. Block and street name.              |
+| `unit`        | `string` | **Required**. Unit number of the apartment.       |
+| `postal`      | `string` | **Required**. Postal code.                        |
 #### Constraints:
 
 - Household Type

@@ -5,7 +5,7 @@ const ObjectId = require('mongoose').Types.ObjectId;
 exports.household_list = [
     {
         _id: ObjectId('000000000001'),
-        householdType: "HDB",
+        housingType: "HDB",
         address: "308A Anchorvale Link",
         unit: "12-88",
         postal: "541308",
@@ -43,7 +43,7 @@ exports.household_list = [
     },
     {
         _id: ObjectId('000000000002'),
-        householdType: "HDB",
+        housingType: "HDB",
         address: "438 Yishun Ave 11",
         unit: "06-311",
         postal: "760438",
@@ -99,7 +99,7 @@ exports.household_list = [
     },
     {
         _id: ObjectId('000000000003'),
-        householdType: "HDB",
+        housingType: "HDB",
         address: "177 Bukit Batok West Ave. 8",
         unit: "03-102",
         postal: "650177",
@@ -146,7 +146,7 @@ exports.household_list = [
     },
     {
         _id: ObjectId('000000000004'),
-        householdType: "Condominium",
+        housingType: "Condominium",
         address: "3 Punggol Field Walk",
         unit: "02-05",
         postal: "828740",
@@ -193,7 +193,7 @@ exports.household_list = [
     },
     {
         _id: ObjectId('000000000005'),
-        householdType: "Landed",
+        housingType: "Landed",
         address: "151 Countryside Road",
         unit: "01-01",
         postal: "786877",

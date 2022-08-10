@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import {IHousehold, isValidHouseholdType, isValidPostal, isValidUnit} from "../models/household.model";
+import {IHousehold, isValidHousingType, isValidPostal, isValidUnit} from "../models/household.model";
 import {
     IFamilyMember,
     isValidDecimal,
@@ -28,7 +28,7 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
         return;
     }
 
-    if (!req.body.householdType || !req.body.address || !req.body.unit || !req.body.postal) {
+    if (!req.body.housingType || !req.body.address || !req.body.unit || !req.body.postal) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             statusCode: HTTP_STATUS.BAD_REQUEST,
             _id: null,
@@ -38,7 +38,7 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
     }
 
     let errMsg = "Invalid field(s): ";
-    if (!isValidHouseholdType(req.body.householdType))
+    if (!isValidHousingType(req.body.housingType))
         errMsg += "housing type, ";
     if (!req.body.address)
         errMsg += "address, ";
@@ -55,16 +55,17 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
         return;
     }
 
-    if (req.body.householdType === "Landed" && req.body.unit !== "01-01") {
+    if (req.body.housingType === "Landed" && req.body.unit !== "01-01") {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             statusCode: HTTP_STATUS.BAD_REQUEST,
             message: 'Invalid unit number for \'Landed\' householdType. Refer to API documentations for more details.'
+            message: 'Invalid unit number for \'Landed\' housingType. Refer to API documentations for more details.'
         });
         return;
     }
 
     const householdObj: IHousehold = {
-        householdType: req.body.householdType,
+        housingType: req.body.housingType,
         address: req.body.address,
         unit: req.body.unit,
         postal: req.body.postal
@@ -180,7 +181,7 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
 
         const household = new Household({
             _id: req.params.id,
-            householdType: householdJSON.get('householdType'),
+            housingType: householdJSON.get('housingType'),
             address: householdJSON.get('address'),
             unit: householdJSON.get('unit'),
             postal: householdJSON.get('postal'),

@@ -26,7 +26,7 @@ exports.createHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         });
         return;
     }
-    if (!req.body.householdType || !req.body.address || !req.body.unit || !req.body.postal) {
+    if (!req.body.housingType || !req.body.address || !req.body.unit || !req.body.postal) {
         res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
             statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
             _id: null,
@@ -35,7 +35,7 @@ exports.createHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         return;
     }
     let errMsg = "Invalid field(s): ";
-    if (!(0, household_model_1.isValidHouseholdType)(req.body.householdType))
+    if (!(0, household_model_1.isValidHousingType)(req.body.housingType))
         errMsg += "housing type, ";
     if (!req.body.address)
         errMsg += "address, ";
@@ -51,15 +51,16 @@ exports.createHousehold = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         });
         return;
     }
-    if (req.body.householdType === "Landed" && req.body.unit !== "01-01") {
+    if (req.body.housingType === "Landed" && req.body.unit !== "01-01") {
         res.status(http_status_1.HTTP_STATUS.BAD_REQUEST).json({
             statusCode: http_status_1.HTTP_STATUS.BAD_REQUEST,
             message: 'Invalid unit number for \'Landed\' householdType. Refer to API documentations for more details.'
+            message: 'Invalid unit number for \'Landed\' housingType. Refer to API documentations for more details.'
         });
         return;
     }
     const householdObj = {
-        householdType: req.body.householdType,
+        housingType: req.body.housingType,
         address: req.body.address,
         unit: req.body.unit,
         postal: req.body.postal
@@ -166,7 +167,7 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         familyMembers.push(new FamilyMember(familyMemberObj));
         const household = new Household({
             _id: req.params.id,
-            householdType: householdJSON.get('householdType'),
+            housingType: householdJSON.get('housingType'),
             address: householdJSON.get('address'),
             unit: householdJSON.get('unit'),
             postal: householdJSON.get('postal'),

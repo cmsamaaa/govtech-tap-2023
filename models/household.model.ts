@@ -1,18 +1,18 @@
 import {Schema} from "mongoose";
 
-export type HouseholdType = 'Landed' | 'Condominium' | 'HDB';
+export type HousingType = 'Landed' | 'Condominium' | 'HDB';
 
 export interface IHousehold {
     _id?: Schema.Types.ObjectId;
-    householdType: HouseholdType;
+    housingType: HousingType;
     address: String;
     unit: String;
     postal: String;
     familyMembers?: [];
 }
 
-export function isValidHouseholdType(householdType: String): householdType is HouseholdType {
-    return ['Landed', 'Condominium', 'HDB'].includes(householdType.toString());
+export function isValidHousingType(housingType: String): housingType is HousingType {
+    return ['Landed', 'Condominium', 'HDB'].includes(housingType.toString());
 }
 
 export function isValidUnit(unit: String): boolean {

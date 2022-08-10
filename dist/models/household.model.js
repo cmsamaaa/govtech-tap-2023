@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isValidPostal = exports.isValidUnit = exports.isValidHouseholdType = void 0;
-function isValidHouseholdType(householdType) {
-    return ['Landed', 'Condominium', 'HDB'].includes(householdType.toString());
+exports.isValidPostal = exports.isValidUnit = exports.isValidHousingType = void 0;
+function isValidHousingType(housingType) {
+    return ['Landed', 'Condominium', 'HDB'].includes(housingType.toString());
 }
-exports.isValidHouseholdType = isValidHouseholdType;
+exports.isValidHousingType = isValidHousingType;
 function isValidUnit(unit) {
     const regex = new RegExp('^[0-9]{2}-[0-9]{2,4}$');
     return regex.test(unit.toString());

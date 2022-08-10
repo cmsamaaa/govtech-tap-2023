@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const FamilyMember = require('../models/familyMember.schema');
 const householdSchema = new mongoose_1.Schema({
-    householdType: {
+    housingType: {
         type: String,
         required: true
     },
@@ -42,7 +42,7 @@ householdSchema.statics.studentEncouragementBonus = function () {
             {
                 $group: {
                     _id: '$_id',
-                    householdType: { $first: '$householdType' },
+                    housingType: { $first: '$housingType' },
                     address: { $first: '$address' },
                     unit: { $first: '$unit' },
                     postal: { $first: '$postal' },
@@ -108,7 +108,7 @@ householdSchema.statics.multiGenerationScheme = function () {
             {
                 $group: {
                     _id: '$_id',
-                    householdType: { $first: '$householdType' },
+                    housingType: { $first: '$housingType' },
                     address: { $first: '$address' },
                     unit: { $first: '$unit' },
                     postal: { $first: '$postal' },
@@ -162,7 +162,7 @@ householdSchema.statics.elderBonus = function () {
             {
                 $project: {
                     _id: '$_id',
-                    householdType: '$householdType',
+                    housingType: '$housingType',
                     address: '$address',
                     unit: '$unit',
                     postal: '$postal',
@@ -195,7 +195,7 @@ householdSchema.statics.elderBonus = function () {
             {
                 $match: {
                     $and: [
-                        { 'householdType': { $eq: 'HDB' } },
+                        { 'housingType': { $eq: 'HDB' } },
                         { 'familyMembers.age': { $gt: 55 } }
                     ]
                 }
@@ -223,7 +223,7 @@ householdSchema.statics.babySunshineGrant = function () {
             {
                 $project: {
                     _id: '$_id',
-                    householdType: '$householdType',
+                    housingType: '$housingType',
                     address: '$address',
                     unit: '$unit',
                     postal: '$postal',
@@ -281,7 +281,7 @@ householdSchema.statics.yoloGstGrant = function () {
             {
                 $group: {
                     _id: '$_id',
-                    householdType: { $first: '$householdType' },
+                    housingType: { $first: '$housingType' },
                     address: { $first: '$address' },
                     unit: { $first: '$unit' },
                     postal: { $first: '$postal' },
@@ -292,7 +292,7 @@ householdSchema.statics.yoloGstGrant = function () {
             {
                 $match: {
                     $and: [
-                        { 'householdType': { $eq: 'HDB' } },
+                        { 'housingType': { $eq: 'HDB' } },
                         { 'householdIncome': { $lt: 100000 } }
                     ]
                 }

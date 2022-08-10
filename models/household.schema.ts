@@ -4,7 +4,7 @@ import {IHousehold} from './household.model';
 const FamilyMember = require('../models/familyMember.schema');
 
 const householdSchema: Schema<IHousehold> = new Schema<IHousehold>({
-        householdType: {
+        housingType: {
             type: String,
             required: true
         },
@@ -37,7 +37,7 @@ householdSchema.statics.studentEncouragementBonus = async function (this: Model<
                 $group:
                     {
                         _id: '$_id',
-                        householdType: {$first: '$householdType'},
+                        housingType: {$first: '$housingType'},
                         address: {$first: '$address'},
                         unit: {$first: '$unit'},
                         postal: {$first: '$postal'},
@@ -108,7 +108,7 @@ householdSchema.statics.multiGenerationScheme = async function (this: Model<IHou
                 $group:
                     {
                         _id: '$_id',
-                        householdType: {$first: '$householdType'},
+                        housingType: {$first: '$housingType'},
                         address: {$first: '$address'},
                         unit: {$first: '$unit'},
                         postal: {$first: '$postal'},
@@ -166,7 +166,7 @@ householdSchema.statics.elderBonus = async function (this: Model<IHousehold>) {
                 $project:
                     {
                         _id: '$_id',
-                        householdType: '$householdType',
+                        housingType: '$housingType',
                         address: '$address',
                         unit: '$unit',
                         postal: '$postal',
@@ -201,7 +201,7 @@ householdSchema.statics.elderBonus = async function (this: Model<IHousehold>) {
                 $match:
                     {
                         $and: [
-                            {'householdType': {$eq: 'HDB'}},
+                            {'housingType': {$eq: 'HDB'}},
                             {'familyMembers.age': {$gt: 55}}
                         ]
                     }
@@ -232,7 +232,7 @@ householdSchema.statics.babySunshineGrant = async function (this: Model<IHouseho
                 $project:
                     {
                         _id: '$_id',
-                        householdType: '$householdType',
+                        housingType: '$housingType',
                         address: '$address',
                         unit: '$unit',
                         postal: '$postal',
@@ -294,7 +294,7 @@ householdSchema.statics.yoloGstGrant = async function (this: Model<IHousehold>) 
                 $group:
                     {
                         _id: '$_id',
-                        householdType: {$first: '$householdType'},
+                        housingType: {$first: '$housingType'},
                         address: {$first: '$address'},
                         unit: {$first: '$unit'},
                         postal: {$first: '$postal'},
@@ -306,7 +306,7 @@ householdSchema.statics.yoloGstGrant = async function (this: Model<IHousehold>) 
                 $match:
                     {
                         $and: [
-                            {'householdType': {$eq: 'HDB'}},
+                            {'housingType': {$eq: 'HDB'}},
                             {'householdIncome': {$lt: 100000}}
                         ]
                     }
