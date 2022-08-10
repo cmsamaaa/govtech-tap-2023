@@ -4,6 +4,8 @@
 For this technical assessment, I chose to attempt the backend (RESTful API) project. This project is written in Node.js 
 with TypeScript, using Express.js framework with MongoDB database. 
 
+#### Author: Loh Chun Mun
+
 ## Table of Contents
 - [Setup Guide (Local)](#setup-guide-local)
   1. [Node.js](#1-nodejs)
