@@ -14,9 +14,11 @@ const db_seed_1 = require("../constants/db.seed");
 const Household = require('../models/household.schema');
 function insertSeed() {
     return __awaiter(this, void 0, void 0, function* () {
-        const result = yield Household.find();
-        if (result.length === 0)
-            yield Household.insertMany(db_seed_1.household_list);
+        if (process.env.NODE_ENV !== 'test') {
+            const result = yield Household.find();
+            if (result.length === 0)
+                yield Household.insertMany(db_seed_1.household_list);
+        }
     });
 }
 exports.insertSeed = insertSeed;

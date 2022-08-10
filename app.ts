@@ -16,6 +16,7 @@ else
     require('dotenv').config({path: path.resolve(__dirname, '../.env.test')});
 
 const MONGODB_URI = process.env.MONGODB_URI;
+const APP_PORT = process.env.PORT ? process.env.PORT : 3000;
 
 const app = express();
 
@@ -38,13 +39,10 @@ app.use(errorController.get404);
 /* Connecting to the database and listening to port 3000. */
 mongoose.connect(MONGODB_URI)
     .then((result: any) => {
-        if (process.env.NODE_ENV !== 'test')
-            /* Calling the database seeding function. */
-            insertSeed().then((result: any) => {
-                app.listen(process.env.PORT);
-            });
-        else
-            app.listen(process.env.PORT);
+        /* Calling the database seeding function. */
+        insertSeed().then((result: any) => {
+            app.listen(APP_PORT);
+        });
     })
     .catch((err: any) => {
         console.log(err);
