@@ -115,7 +115,7 @@ exports.addFamilyMember = async (req: Request, res: Response, next: NextFunction
         errMsg += "gender, ";
     if (!isValidMaritalStatus(req.body.maritalStatus))
         errMsg += "marital status, ";
-    if (req.body.maritalStatus === "Married" && req.body.maritalStatus && !req.body.spouse)
+    if (req.body.maritalStatus === "Married" && !req.body.spouse)
         errMsg += "spouse, ";
     if (!isValidOccupationType(req.body.occupationType))
         errMsg += "occupation type, ";

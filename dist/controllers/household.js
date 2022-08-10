@@ -107,7 +107,7 @@ exports.addFamilyMember = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         errMsg += "gender, ";
     if (!(0, familyMember_model_1.isValidMaritalStatus)(req.body.maritalStatus))
         errMsg += "marital status, ";
-    if (req.body.maritalStatus === "Married" && req.body.maritalStatus && !req.body.spouse)
+    if (req.body.maritalStatus === "Married" && !req.body.spouse)
         errMsg += "spouse, ";
     if (!(0, familyMember_model_1.isValidOccupationType)(req.body.occupationType))
         errMsg += "occupation type, ";
