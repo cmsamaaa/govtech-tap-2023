@@ -1,12 +1,12 @@
 # govtech-tap-2023
 
 #### METEOR TAP Assessment 2023
-For this technical assessment, I chose to attempt the backend (RESTful API) project. This project is written in NodeJs 
+For this technical assessment, I chose to attempt the backend (RESTful API) project. This project is written in Node.js 
 with TypeScript, using Express.js framework with MongoDB database. 
 
 ## Table of Contents
 - [Setup Guide (Local)](#setup-guide-local)
-  1. [NodeJs](#1-nodejs)
+  1. [Node.js](#1-nodejs)
   3. [MongoDB](#2-mongodb)
   4. [Process Environment Variables](#3-process-environment-variables-env)
 - [npm Commands](#npm-commands)
@@ -38,12 +38,12 @@ with TypeScript, using Express.js framework with MongoDB database.
 
 ## Setup Guide (Local)
 Needless to say, please pull the project first before proceeding.
-### 1. NodeJs
-To run this project locally, you must have NodeJs installed on your device. A quick way to get started is to directly
-install NodeJs on your system. You may download the installer [here](https://nodejs.org/en/download/).
+### 1. Node.js
+To run this project locally, you must have Node.js installed on your device. A quick way to get started is to directly
+install Node.js on your system. You may download the installer [here](https://nodejs.org/en/download/).
 
 However, it is strongly recommended to use a Node version manager such as [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) 
-to install NodeJs and npm. You may read more about it [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
+to install Node.js and npm. You may read more about it [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
 ### 2. MongoDB
 To run the project locally, you must ensure that you have MongoDB database available. You may host a MongoDB database
 [locally](https://www.mongodb.com/docs/manual/installation/) or on the cloud through 
@@ -76,7 +76,7 @@ You may do so by creating an empty file in the root directory and name it `.env`
 MONGODB_URI="mongodb+srv://<USER_NAME>:<USER_PASSWORD>@<CLUSTER_NAME>.mongodb.net/<DATABASE_NAME>?retryWrites=true&w=majority"
 PORT=3000
 ```
-> **NOTE:** `PORT` can be configured to your preference, but the default port for NodeJs server is normally configured to 3000. You may specify any name of your choice for `<DATABASE_NAME>`.
+> **NOTE:** `PORT` can be configured to your preference, but the default port for Node.js server is normally configured to 3000. You may specify any name of your choice for `<DATABASE_NAME>`.
 
 ## npm Commands
 Now that your local files are set up and ready, we can start the server and run the server locally! 
@@ -105,6 +105,9 @@ the following:
 ## Dependencies
 
 #### Running on Node v16.13.1
+Refer to [package-lock.json](./package-lock.json) for all the nitty-gritty details, or refer to the following for a
+summarised list taken from [package.json](./package.json): 
+
     "dependencies": {
         "body-parser": "^1.20.0",
         "cors": "^2.8.5",
@@ -125,6 +128,7 @@ the following:
         "concurrently": "^7.3.0",
         "mocha": "^10.0.0",
         "nodemon": "^2.0.19",
+        "nyc": "^15.1.0",
         "typescript": "^4.7.4"
     }
 
@@ -361,10 +365,36 @@ GET /household/find-qualifying/:option
 | 404         | `NOT FOUND`   |
 
 ## Unit Test
-Work in progress...
+Unit tests have been written to test each of the API endpoints, ensuring that the HTTP status codes are returned 
+correctly, all responses returns as intended and in proper format, and that exceptions are handled properly. In order to
+achieve this, I picked a combination of [Mocha.js](https://mochajs.org/) and [Chai.js](https://www.chaijs.com/) 
+framework, which are commonly used together for writing Node.js unit testing.
+
+To ensure that the unit tests are covering as many segments of the codes as possible, I have used a code coverage
+tester, [Istanbul / nyc](https://istanbul.js.org/), as a means to ensure my codebase are well tested by my unit tests.
+
+During the testing, the application automatically swaps to the test database, such that the production database will be 
+left untouched. This is achieved through setting the test database's URI in the GitHub Secrets, and retrieving the URI
+as a process environment variable, such that different devices' environment variables would vary, allowing for more
+flexibility in swapping databases whenever necessary.
+
+In order to accurately test the endpoints and response results, seed data will be inserted at the start of the test and 
+removed at the end of testing.
 
 ## CI/CD
-Work in progress...
+This project is supported by a CI/CD pipeline workflow. The entire process starting from the moment the code is pushed 
+onto this repository, until the deployment on Heroku are fully automated.
+
+The CI/CD process begins with the workflow process on GitHub Actions. Click [here](./.github/workflows/node.yml) to view
+the YAML file.
+
+Upon pushing into the "main" branch, the CI workflow will be automatically triggered, beginning with checking out the 
+repository so that the workflow can access it. The CI attempt to install all necessary dependencies, compile the 
+Typescript into JavaScript (build), and run the unit testings (test).
+
+When the CI workflow passes, the codes will be deployed to Heroku automatically.
+
+And that encompasses the entire workflow and pipeline of this project!
 
 ## Explanations
 ### Cross-Origin Resource Sharing (CORS)
@@ -388,12 +418,12 @@ are made, especially for sensitive data such as citizen's addresses and personal
 - `maritalStatus` is constrained to standard options of 'Single', 'Married', 'Divorced', 'Widowed'.
 - Same as the reason before, these constraints are put in place to ensure that users do not enter invalid values, thus allowing us to accurately filter the information by these fields when necessary.
 ### Architecture Decisions
-When I received the email notifying me of this assessment, I spontaneously decided on NodeJs as it is very a rather 
+When I received the email notifying me of this assessment, I spontaneously decided on Node.js as it is very a rather 
 popular JavaScript runtime environment being widely used today. However, I wanted to challenge myself, as I have had 
 prior experiences writing in JavaScript. This is when I decided to write this program in an unfamiliar language 
 (as an opportunity for me to learn). 
 
-TypeScript, which is often deemed as the more "reliable" JavaScript, while still being able to work with NodeJs, the 
+TypeScript, which is often deemed as the more "reliable" JavaScript, while still being able to work with Node.js, the 
 Express.js framework, and it works well with a popular non-relational database, MongoDB. TypeScript allows for easier 
 code refactoring, better readability due to specifying strict types and its support of OOP paradigm.
 
