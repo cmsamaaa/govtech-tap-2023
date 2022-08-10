@@ -23,6 +23,7 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
     if (Object.keys(req.body).length === 0) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             statusCode: HTTP_STATUS.BAD_REQUEST,
+            _id: null,
             message: 'Request body empty. Ensure request is submitted in JSON format.'
         });
         return;
@@ -40,8 +41,6 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
     let errMsg = "Invalid field(s): ";
     if (!isValidHousingType(req.body.housingType))
         errMsg += "housing type, ";
-    if (!req.body.address)
-        errMsg += "address, ";
     if (!isValidUnit(req.body.unit))
         errMsg += "unit, ";
     if (!isValidPostal(req.body.postal))
@@ -58,7 +57,7 @@ exports.createHousehold = async (req: Request, res: Response, next: NextFunction
     if (req.body.housingType === "Landed" && req.body.unit !== "01-01") {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             statusCode: HTTP_STATUS.BAD_REQUEST,
-            message: 'Invalid unit number for \'Landed\' householdType. Refer to API documentations for more details.'
+            _id: null,
             message: 'Invalid unit number for \'Landed\' housingType. Refer to API documentations for more details.'
         });
         return;
