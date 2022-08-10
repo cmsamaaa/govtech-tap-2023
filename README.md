@@ -377,8 +377,9 @@ GET /household/find-qualifying/:option
 ## Unit Test
 Unit tests have been written to test each of the API endpoints, ensuring that the HTTP status codes are returned 
 correctly, all responses returns as intended and in proper format, and that exceptions are handled properly. In order to
-achieve this, I picked a combination of [Mocha.js](https://mochajs.org/) and [Chai.js](https://www.chaijs.com/) 
-framework, which are commonly used together for writing Node.js unit testing.
+achieve this, I picked a combination of [Mocha.js](https://mochajs.org/) and [Chai.js](https://www.chaijs.com/)
+framework, which are commonly used together for writing Node.js unit testing. On top of these, it was also necessary to 
+install [Chai HTTP](https://www.chaijs.com/plugins/chai-http/) to support HTTP integration testing with Chai assertions.
 
 To ensure that the unit tests are covering as many segments of the codes as possible, I have used a code coverage
 tester, [Istanbul / nyc](https://istanbul.js.org/), as a means to ensure my codebase are well tested by my unit tests.
