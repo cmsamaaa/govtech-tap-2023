@@ -7,8 +7,7 @@
     "build": "npx tsc",
     "start": "node dist/app.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/app.js\"",
-    "test": "nyc --reporter=html --reporter=text mocha dist/test/household.js --timeout 5000 --exit",
-    "test:build": "npx tsc --watch"
+    "test": "nyc --reporter=html --reporter=text mocha dist/test/household.js --timeout 5000 --exit"
   },
   "repository": {
     "type": "git",
