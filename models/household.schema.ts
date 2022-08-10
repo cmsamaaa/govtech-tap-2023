@@ -202,7 +202,7 @@ householdSchema.statics.elderBonus = async function (this: Model<IHousehold>) {
                     {
                         $and: [
                             {'householdType': {$eq: 'HDB'}},
-                            {'familyMembers.age': {$gte: 55}}
+                            {'familyMembers.age': {$gt: 55}}
                         ]
                     }
             },
@@ -214,7 +214,7 @@ householdSchema.statics.elderBonus = async function (this: Model<IHousehold>) {
                                 input: '$familyMembers',
                                 as: 'fm',
                                 cond: {
-                                    $gte: ['$$fm.age', 55]
+                                    $gt: ['$$fm.age', 55]
                                 }
                             }
                         }
